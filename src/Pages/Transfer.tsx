@@ -17,7 +17,7 @@ export default function Transfer() {
         <Input type="text" placeholder="Bank" />
         <div>
           <Input type="text" placeholder="Beneficiary Account Number" />
-          <p className="text-slate-800 text-sm font-medium">
+          <p className="text-slate-800 text-sm font-medium ml-2">
             Chukwu Emmanuel Oluwatobi
           </p>
         </div>
