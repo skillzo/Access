@@ -7,6 +7,7 @@ import "./index.css";
 import Login from "./Pages/Login";
 import { IconContext } from "react-icons/lib";
 import Transfer from "./Pages/Transfer";
+import Transactions from "./Pages/Transactions";
 
 // initailize react router v6.8.2
 
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Transfer />,
+      },
+      {
+        path: "/transactions",
+        element: <Transactions />,
       },
     ],
   },

@@ -1,10 +1,18 @@
 import React from "react";
+import RecentTransfer from "../components/RecentTransfer";
 import Button from "../components/tinycomp/Button";
 import Input from "../components/tinycomp/Input";
 
 export default function Transfer() {
   return (
     <>
+      {/* frequent transfers */}
+      <div className="space-y-2">
+        <p className="text-slate-600 font-medium text-sm">Recent Transfers</p>
+        <div className="flex space-x-4">
+          <RecentTransfer />
+        </div>
+      </div>
       <div className="space-y-[1em]">
         <Input type="text" placeholder="Bank" />
         <div>

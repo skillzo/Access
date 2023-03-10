@@ -4,6 +4,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import "./App.css";
 import Wrapper from "./components/Wrapper/Wrapper";
 import { Outlet } from "react-router-dom";
+import RecentTransfer from "./components/RecentTransfer";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -43,8 +44,6 @@ function App() {
           </div>
         </div>
       </div>
-
-      {/*  */}
       <Outlet />
     </Wrapper>
   );
