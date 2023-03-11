@@ -8,9 +8,8 @@ import Login from "./Pages/Login";
 import { IconContext } from "react-icons/lib";
 import Transfer from "./Pages/Transfer";
 import Transactions from "./Pages/Transactions";
-
+import { QueryClient, QueryClientProvider } from "react-query";
 // initailize react router v6.8.2
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,10 +32,14 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <IconContext.Provider value={{ size: "25px" }}>
-      <RouterProvider router={router} />
-    </IconContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <IconContext.Provider value={{ size: "25px" }}>
+        <RouterProvider router={router} />
+      </IconContext.Provider>
+    </QueryClientProvider>
   </React.StrictMode>
 );

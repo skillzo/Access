@@ -5,6 +5,7 @@ import Input from "../components/tinycomp/Input";
 import Select from "react-select";
 import data from "../store/bankcode.json";
 import axios from "axios";
+import { useQuery } from "react-query";
 
 export default function Transfer() {
   const [selected, setSelected] = useState("");
@@ -20,19 +21,27 @@ export default function Transfer() {
     });
   });
 
-  const getData = () => {
-    const url = `https://maylancer.org/api/nuban/api.php?account_number=${accNum}&bank_code=${selected}`;
-    axios.get(url).then((res) => {
-      console.log(res);
-    });
+  const getData = async () => {
+    const url = `https://maylancer.org/api/nuban/api.php?account_number=0243563736&bank_code=058`;
+    return axios.get(url);
   };
+
+  const {
+    data: accName,
+    isLoading,
+    refetch,
+  } = useQuery("acc-name", getData, { enabled: false });
 
   const handleChange = (e: any) => {
     setAccNum(e.target.value);
-    if (accNum?.length == 10) {
-      getData();
+    console.log(accNum.length);
+    if (accNum.length === 9) {
+      console.log("fetching");
     }
+    return;
   };
+
+  console.log("accName", accName);
   return (
     <>
       {/* frequent transfers */}
@@ -57,7 +66,7 @@ export default function Transfer() {
           options={options}
           onChange={(e: any) => setSelected(e.value)}
         />
-
+        <button onClick={() => refetch()}>Fetch</button>
         {/* enter account number and feedback */}
         <div>
           <Input
@@ -66,11 +75,13 @@ export default function Transfer() {
             max={10}
             onChange={handleChange}
           />
-          <div className="flex justify-between items-center w-[95%] mx-auto">
-            <p className="text-slate-800 text-sm font-medium ">
-              Chukwu Emmanuel Oluwatobi
-            </p>
-            <div>...</div>
+          <div className="text-right w-[95%] mx-auto">
+            {accName && !isLoading && (
+              <p className="text-slate-800 text-sm font-medium ">
+                {accName.data.account_name}
+              </p>
+            )}
+            {isLoading && !accName && <div>...</div>}
           </div>
         </div>
 

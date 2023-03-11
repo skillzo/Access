@@ -5,9 +5,9 @@ import Wrapper from "./components/Wrapper/Wrapper";
 import { Outlet, useLocation } from "react-router-dom";
 import Footer from "./components/navigations/Footer";
 import Dashboard from "./components/Dashboard";
-
 function App() {
   const location = useLocation();
+
   return (
     <>
       {/* not responsive feedback */}
