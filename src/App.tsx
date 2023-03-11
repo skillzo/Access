@@ -3,23 +3,35 @@ import { BiArrowBack } from "react-icons/bi";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import "./App.css";
 import Wrapper from "./components/Wrapper/Wrapper";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Footer from "./components/navigations/Footer";
 
 function App() {
   const [showBalance, setShowBalance] = useState(false);
+  const location = useLocation();
+  console.log(location.pathname);
 
   return (
     <>
+      {/* not responsive feedback */}
       <div className="hidden lg:flex h-screen w-full justify-center items-center text-[#ee585e] ">
         This is a mobile app, Please switch to a Phone or a tablet
       </div>
       <div className="lg:hidden">
+        {/* app here */}
         <Wrapper>
           {/* Navgation */}
           <div className="flex items-center">
             <BiArrowBack />
-            <p className="text-center text-lg font-medium w-[90%]">Transfer</p>
+            <p className="text-center text-lg font-medium w-[90%]">
+              {location?.pathname === "/"
+                ? "Transfer"
+                : location.pathname
+                    .slice(1, location.pathname.length)
+                    .charAt(0)
+                    .toUpperCase() +
+                  location.pathname.slice(2, location.pathname.length)}
+            </p>
           </div>
 
           {/* Account Dashboard */}
