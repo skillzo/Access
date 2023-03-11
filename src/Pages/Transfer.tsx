@@ -2,6 +2,7 @@ import React from "react";
 import RecentTransfer from "../components/RecentTransfer";
 import Button from "../components/tinycomp/Button";
 import Input from "../components/tinycomp/Input";
+import { BiChevronDown } from "react-icons/bi";
 
 export default function Transfer() {
   return (
@@ -14,7 +15,12 @@ export default function Transfer() {
         </div>
       </div>
       <div className="space-y-[1em]">
-        <Input type="text" placeholder="Bank" />
+        <div className="bg-white flex justify-between items-center w-full px-[1em] py-[0.8em]  rounded-sm outline-none border border-[#bbbcbc8e]">
+          <p className="text-slate-400">Bank</p>
+          <div className="p-1 rounded-full bg-[#e7eefc]">
+            <BiChevronDown color="#254b88" />
+          </div>
+        </div>
         <div>
           <Input type="text" placeholder="Beneficiary Account Number" />
           <div className="flex justify-between items-center w-[95%] mx-auto">

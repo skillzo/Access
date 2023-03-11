@@ -19,7 +19,7 @@ function App() {
         </div>
 
         {/* Account Dashboard */}
-        <div className="bg-[#173f80] text-white text-xs p-[2em] rounded-lg  flex justify-between items-center">
+        <div className="bg-gradient-to-r from-[#4480e3] to-[#173f80] text-white text-xs p-[2em] rounded-lg  flex justify-between items-center">
           <div className="space-y-2">
             <div className="text-2xl font-semibold">
               {showBalance ? "skillzo" : <p>&#8358; 0.10</p>}

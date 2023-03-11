@@ -3,23 +3,24 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer {
-  @layer {
-    :root {
-      --bg-color: #f5f6f7;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      background-color: var(--bg-color);
-      font-family: "Golos Text", sans-serif;
-      padding-bottom: 5em;
-    }
-    body::-webkit-scrollbar {
-      display: none;
-    }
+@layer base {
+  :root {
+    --bg-color: #f5f6f7;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background-color: var(--bg-color);
+    font-family: "Golos Text", sans-serif;
+    padding-bottom: 5em;
+  }
+  body::-webkit-scrollbar {
+    display: none;
+  }
+  a {
+    -webkit-tap-highlight-color: transparent;
   }
 }
