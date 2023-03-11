@@ -6,6 +6,7 @@ module.exports = {
       color: {
         "access-blue": "#173f80",
         "p-ash": "#878787",
+        "user-red": "red",
       },
     },
   },

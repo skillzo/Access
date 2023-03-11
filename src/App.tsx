@@ -36,7 +36,7 @@ function App() {
         </div>
 
         <div className="text-xs text-slate-600 font-medium space-y-[0.5em]">
-          <p>Daily Transaction Limit: &#8358; 25,000,0000</p>
+          <p>Daily Transaction Limit: &#8358; 3,000,0000</p>
           <div className="bg-[#dcdee3] ">
             <div className="w-[20%] bg-[#173f80] p-[0.5em] rounded-r-full"></div>
           </div>
