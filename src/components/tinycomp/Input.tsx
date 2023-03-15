@@ -6,6 +6,7 @@ interface props {
   value?: string;
   styleProps?: string;
   max?: number;
+  disabled?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 export default function Input({
@@ -14,16 +15,18 @@ export default function Input({
   value,
   max,
   styleProps,
+  disabled,
   onChange,
 }: props) {
   return (
     <div>
       <input
         type={type}
-        className={`w-full px-[1em] py-[0.8em]  rounded-sm outline-none border border-[#bbbcbc8e] focus:border-[#173f80] ${styleProps}`}
+        className={`w-full px-[1em] py-[0.8em]  rounded-sm outline-none border border-[#bbbcbc8e] focus:border-p-blue ${styleProps}`}
         placeholder={placeholder}
         value={value}
         maxLength={max}
+        disabled={disabled}
         onChange={onChange}
       />
     </div>

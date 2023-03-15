@@ -30,7 +30,7 @@ export default function Login() {
               <Input type="text" placeholder="username" />
               <Input type="password" placeholder="password" />
             </div>
-            <div className="text-[#173f80] font-medium text-right">
+            <div className="text-p-blue font-medium text-right">
               Forgot Password?
             </div>
             <button className="bg-[#fe8101] text-white text-sm font-semibold py-[1em] w-full">
@@ -39,7 +39,7 @@ export default function Login() {
           </div>
           <div className="text-center text-sm text-slate-400">
             Don't have an account?
-            <span className="font-semibold text-[#173f80]">Sign Up</span>
+            <span className="font-semibold text-p-blue">Sign Up</span>
           </div>
         </div>
       </div>

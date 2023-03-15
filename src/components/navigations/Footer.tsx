@@ -6,7 +6,7 @@ import { IconContext } from "react-icons/lib";
 export default function Footer() {
   const style = {
     inital: "p-3 rounded-full ",
-    active: "p-3 rounded-full bg-[#173f80] text-white",
+    active: "p-3 rounded-full bg-p-blue text-white",
   };
 
   return (
@@ -28,4 +28,3 @@ export default function Footer() {
     </IconContext.Provider>
   );
 }
-

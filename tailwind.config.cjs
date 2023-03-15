@@ -3,10 +3,10 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      color: {
-        "access-blue": "#173f80",
+      colors: {
+        "p-blue": "#173f80",
         "p-ash": "#878787",
-        "user-red": "red",
+        "td-ash": "#878787",
       },
     },
   },

@@ -8,8 +8,19 @@ import axios from "axios";
 import { useQuery } from "react-query";
 
 export default function Transfer() {
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState("058");
   const [accNum, setAccNum] = useState("");
+  const [transferAmount, setTransferAmount] = useState("");
+
+  const currentUser = [
+    {
+      id: 1,
+      name: "Chukwu Emmanuel",
+      user: "skillzo",
+      transactions: [4000, 60000, 700000, 400000],
+      password: "skillzo",
+    },
+  ];
 
   const options: any = [];
   data.map((item) => {
@@ -21,27 +32,40 @@ export default function Transfer() {
     });
   });
 
-  const getData = async () => {
-    const url = `https://maylancer.org/api/nuban/api.php?account_number=0243563736&bank_code=058`;
+  const getData: any = async () => {
+    const url = `https://maylancer.org/api/nuban/api.php?account_number=${accNum.trim()}&bank_code=${selected}`;
     return axios.get(url);
   };
 
   const {
     data: accName,
     isLoading,
+    isFetching,
     refetch,
   } = useQuery("acc-name", getData, { enabled: false });
 
+  // fetch accont name  api call
+
   const handleChange = (e: any) => {
     setAccNum(e.target.value);
-    console.log(accNum.length);
-    if (accNum.length === 9) {
-      console.log("fetching");
+    if (accNum.length == 9) {
+      setTimeout(() => {
+        refetch();
+        console.log("fetch data");
+      }, 500);
     }
-    return;
   };
 
-  console.log("accName", accName);
+  const addComma = (num: number) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+  const removeNonNumber = (num: number) =>
+    num.toString().replace(/[^0-9]/g, "");
+
+  const handleAmount = (e: any) => {
+    setTransferAmount(addComma(removeNonNumber(e.target.value)));
+  };
+
   return (
     <>
       {/* frequent transfers */}
@@ -72,25 +96,33 @@ export default function Transfer() {
           <Input
             type="text"
             placeholder="Beneficiary Account Number"
-            max={10}
+            value={accNum}
             onChange={handleChange}
           />
           <div className="text-right w-[95%] mx-auto">
             {accName && !isLoading && (
               <p className="text-slate-800 text-sm font-medium ">
-                {accName.data.account_name}
+                {accName?.data.account_name}
               </p>
             )}
-            {isLoading && !accName && <div>...</div>}
+
+            {isLoading || (isFetching && !accName && <div>...</div>)}
           </div>
         </div>
 
         {/* enter amount */}
         <div>
-          <Input type="text" placeholder="&#8358; Amount" />
+          <Input
+            type="text"
+            placeholder="&#8358; Amount"
+            value={transferAmount}
+            onChange={handleAmount}
+          />
+
+          {/* max transfer */}
           <p className="text-slate-400 text-xs">
             Maximum Amount:
-            <span className="text-[#173f80] font-medium text-sm ml-2">
+            <span className="text-p-blue font-medium text-sm ml-2">
               &#8358; 3,000,000
             </span>
           </p>
