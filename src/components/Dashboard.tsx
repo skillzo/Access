@@ -1,20 +1,30 @@
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useUser } from "../store/context";
 import TransactionLimit from "./TransactionLimit";
+import { formatNumber } from "../utils/formatNumber";
 
 export default function Dashboard() {
   const [showBalance, setShowBalance] = useState(false);
+  const { currentUser } = useUser();
+  const balance = formatNumber(
+    currentUser?.transaction.reduce((a: any, b: any) => a + b, 0)
+  );
   return (
     <>
       <div className="bg-gradient-to-r from-[#4480e3] to-p-blue text-white text-xs p-[2em] rounded-lg  flex justify-between items-center">
         <div className="space-y-2">
           <div className="text-2xl font-semibold">
-            {showBalance ? "skillzo" : <p>&#8358; 0.10</p>}
+            {showBalance ? (
+              currentUser?.userName
+            ) : (
+              <p>&#8358; {balance || 0}</p>
+            )}
           </div>
-          <p>
+          <div>
             PREMIER SAVINGS
-            {!showBalance && ": SKILLZO"}
-          </p>
+            <span>{!showBalance && `: ${currentUser?.userName}`}</span>
+          </div>
           <div>Account Status: REGULAR</div>
         </div>
 

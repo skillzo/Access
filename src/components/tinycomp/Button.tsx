@@ -8,6 +8,7 @@ interface props {
 export default function Button({ children, disabled }: props) {
   return (
     <button
+      disabled={disabled}
       className={`text-white ${
         disabled ? "bg-[#bebfbf]" : "bg-[#fe8101]"
       } text-sm font-semibold py-[1em] w-full`}

@@ -2,8 +2,11 @@ import React from "react";
 import { ReactComponent as Logo } from "../assets/brand/logo.svg";
 import Input from "../components/tinycomp/Input";
 import Wrapper from "../components/Wrapper/Wrapper";
+import { useUser } from "../store/context";
 
 export default function Login() {
+  const { currentUser } = useUser();
+  const name = currentUser?.full_name.split(" ")[1];
   return (
     <Wrapper>
       <div className="flex justify-between items-center">
@@ -22,7 +25,7 @@ export default function Login() {
         <div className=" w-[80%] mx-auto space-y-[2em]">
           <div className="text-slate-400 font-semibold text-center ">
             Welcome back,
-            <span className="text-black font-normal"> Emmanuel</span>
+            <span className="text-black font-normal">{name}</span>
           </div>
 
           <div className="space-y-[1.5em] bg-access-blue">
@@ -38,7 +41,7 @@ export default function Login() {
             </button>
           </div>
           <div className="text-center text-sm text-slate-400">
-            Don't have an account?
+            Don't have an account? &nbsp;
             <span className="font-semibold text-p-blue">Sign Up</span>
           </div>
         </div>

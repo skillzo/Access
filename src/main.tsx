@@ -9,6 +9,7 @@ import { IconContext } from "react-icons/lib";
 import Transfer from "./Pages/Transfer";
 import Transactions from "./Pages/Transactions";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ContextProvider } from "./store/context";
 // initailize react router v6.8.2
 const router = createBrowserRouter([
   {
@@ -38,7 +39,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <IconContext.Provider value={{ size: "25px" }}>
-        <RouterProvider router={router} />
+        <ContextProvider>
+          <RouterProvider router={router} />
+        </ContextProvider>
       </IconContext.Provider>
     </QueryClientProvider>
   </React.StrictMode>

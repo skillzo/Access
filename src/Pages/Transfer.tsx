@@ -11,16 +11,7 @@ export default function Transfer() {
   const [selected, setSelected] = useState("058");
   const [accNum, setAccNum] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
-
-  const currentUser = [
-    {
-      id: 1,
-      name: "Chukwu Emmanuel",
-      user: "skillzo",
-      transactions: [4000, 60000, 700000, 400000],
-      password: "skillzo",
-    },
-  ];
+  const [narration, setNarration] = useState("");
 
   const options: any = [];
   data.map((item) => {
@@ -32,6 +23,18 @@ export default function Transfer() {
     });
   });
 
+  /**
+   * It returns a promise that resolves to the result of an axios.get() call.
+   * @returns An object with the following properties:
+   *   data: {
+   *     status: "success",
+   *     message: "Account number is valid",
+   *     data: {
+   *       account_number: "1234567890",
+   *       bank_code: "044",
+   *       bank_name: "Access Bank Plc",
+   *       account_name
+   */
   const getData: any = async () => {
     const url = `https://maylancer.org/api/nuban/api.php?account_number=${accNum.trim()}&bank_code=${selected}`;
     return axios.get(url);
@@ -45,26 +48,26 @@ export default function Transfer() {
   } = useQuery("acc-name", getData, { enabled: false });
 
   // fetch accont name  api call
-
   const handleChange = (e: any) => {
     setAccNum(e.target.value);
     if (accNum.length == 9) {
       setTimeout(() => {
-        refetch();
         console.log("fetch data");
+        refetch();
       }, 500);
     }
   };
 
-  const addComma = (num: number) => {
+  const addComma = (num: any) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-  const removeNonNumber = (num: number) =>
-    num.toString().replace(/[^0-9]/g, "");
+  const removeNonNumber = (num: any) => num.toString().replace(/[^0-9]/g, "");
 
   const handleAmount = (e: any) => {
     setTransferAmount(addComma(removeNonNumber(e.target.value)));
   };
+
+  const isValid = selected && accName && transferAmount && narration;
 
   return (
     <>
@@ -78,19 +81,13 @@ export default function Transfer() {
 
       {/* Transfer form  */}
       <div className="space-y-[1em]">
-        {/* <div className="bg-white flex justify-between items-center w-full px-[1em] py-[0.8em]  rounded-sm outline-none border border-[#bbbcbc8e]">
-          <p className="text-slate-400">Bank</p>
-          <div className="p-1 rounded-full bg-[#e7eefc]">
-            <BiChevronDown color="#254b88" />
-          </div>
-        </div> */}
-
+        {/* A custom select component that takes in a placeholder, options and
+        onChange function. */}
         <Select
           placeholder="Bank"
           options={options}
           onChange={(e: any) => setSelected(e.value)}
         />
-        <button onClick={() => refetch()}>Fetch</button>
         {/* enter account number and feedback */}
         <div>
           <Input
@@ -109,7 +106,6 @@ export default function Transfer() {
             {isLoading || (isFetching && !accName && <div>...</div>)}
           </div>
         </div>
-
         {/* enter amount */}
         <div>
           <Input
@@ -127,9 +123,15 @@ export default function Transfer() {
             </span>
           </p>
         </div>
-
-        <Input type="text" placeholder="Narration" />
-        <Button disabled>Proceed</Button>
+        <Input
+          type="text"
+          placeholder="Narration"
+          value={narration}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setNarration(e.target.value)
+          }
+        />
+        <Button disabled={!isValid}>Proceed</Button>
       </div>
     </>
   );
