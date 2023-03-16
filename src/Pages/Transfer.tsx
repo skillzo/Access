@@ -6,6 +6,7 @@ import Select from "react-select";
 import data from "../store/bankcode.json";
 import axios from "axios";
 import { useQuery } from "react-query";
+import Feedbacks from "../components/feedbacks/Feedbacks";
 
 export default function Transfer() {
   const [selected, setSelected] = useState("058");
@@ -97,13 +98,12 @@ export default function Transfer() {
             onChange={handleChange}
           />
           <div className="text-right w-[95%] mx-auto">
+            {isLoading && !accName && <div>...</div>}
             {accName && !isLoading && (
               <p className="text-slate-800 text-sm font-medium ">
                 {accName?.data.account_name}
               </p>
             )}
-
-            {isLoading || (isFetching && !accName && <div>...</div>)}
           </div>
         </div>
         {/* enter amount */}
@@ -131,6 +131,7 @@ export default function Transfer() {
             setNarration(e.target.value)
           }
         />
+        <Feedbacks />
         <Button disabled={!isValid}>Proceed</Button>
       </div>
     </>

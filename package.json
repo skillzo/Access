@@ -16,6 +16,7 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.8.2",
     "react-select": "^5.7.0",
+    "react-spinners": "^0.13.8",
     "uuidv4": "^6.2.13",
     "vite-plugin-svgr": "^2.4.0"
   },
