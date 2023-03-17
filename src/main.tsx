@@ -45,7 +45,14 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <QueryClientProvider client={queryClient}>
       <IconContext.Provider value={{ size: "25px" }}>
         <ContextProvider>
-          <RouterProvider router={router} />
+          <>
+            <div className="hidden md:flex h-screen w-full justify-center items-center text-[#ee585e] ">
+              This is a mobile app, Please switch to a Phone
+            </div>
+            <div className="md:hidden">
+              <RouterProvider router={router} />
+            </div>
+          </>
         </ContextProvider>
       </IconContext.Provider>
     </QueryClientProvider>

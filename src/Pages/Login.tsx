@@ -1,20 +1,20 @@
 import React from "react";
+import { useEffect } from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ReactComponent as Logo } from "../assets/brand/logo.svg";
 import Input from "../components/tinycomp/Input";
 import Wrapper from "../components/Wrapper/Wrapper";
 import { useUser } from "../store/context";
 
 export default function Login() {
-  const { currentUser } = useUser();
+  const { currentUser, users, setCurrentUser, setIsAuth } = useUser();
   const [details, setDetails] = useState({ username: "", password: "" });
-  const name = currentUser?.full_name.split(" ")[1];
+  // const name = currentUser?.full_name.split(" ")[1] || "skillzo";
 
-  // login user
+  const navigate = useNavigate();
 
-  console.log(currentUser);
-  console.log(details);
-
+  // set username and password
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setDetails((prev) => {
@@ -22,10 +22,23 @@ export default function Login() {
     });
   };
 
+  // login user
+  const currUser = users.find(
+    (item: any) => item.userName === details.username.toLowerCase()
+  );
+
   const handlesubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-   
+    if (details?.password === currUser?.password) {
+      setCurrentUser(currUser);
+      setIsAuth(true);
+      navigate("/", { replace: true });
+    }
   };
+
+  useEffect(() => {
+    localStorage.setItem("currUser", JSON.stringify(currUser));
+  }, [currUser]);
 
   return (
     <Wrapper>
@@ -45,7 +58,7 @@ export default function Login() {
         <div className=" w-[80%] mx-auto space-y-[2em]">
           <div className="text-slate-400 font-semibold text-center ">
             Welcome back,
-            <span className="text-black font-normal">{name}</span>
+            {/* <span className="text-black font-normal">{name}</span> */}
           </div>
 
           {/* login form  */}

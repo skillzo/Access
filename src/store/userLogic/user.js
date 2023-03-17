@@ -8,7 +8,6 @@ class User {
 }
 
 const skillzo = new User("skillzo", 1111);
-console.dir(skillzo);
 
 // const account1 = {
 //   owner: 'Jonas Schmedtmann',
