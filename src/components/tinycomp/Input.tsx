@@ -7,6 +7,7 @@ interface props {
   styleProps?: string;
   max?: number;
   disabled?: boolean;
+  name?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 export default function Input({
@@ -16,6 +17,7 @@ export default function Input({
   max,
   styleProps,
   disabled,
+  name,
   onChange,
 }: props) {
   return (
@@ -26,6 +28,7 @@ export default function Input({
         placeholder={placeholder}
         value={value}
         maxLength={max}
+        name={name}
         disabled={disabled}
         onChange={onChange}
       />

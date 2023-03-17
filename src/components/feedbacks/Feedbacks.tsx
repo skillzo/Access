@@ -1,13 +1,12 @@
 import React from "react";
+interface types {
+  children: React.ReactNode;
+}
 
-export default function Feedbacks() {
+export default function Feedbacks({ children }: types) {
   return (
-    <div>
-      <img src="https://i.gifer.com/7efs.gif" alt="feedback" />
-      <img
-        src="https://powerusers.microsoft.com/t5/image/serverpage/image-id/118082i204C32E01666789C/image-size/large/is-moderation-mode/true?v=v2&px=999"
-        alt="feedback"
-      />
+    <div className="fixed top-[-2em] left-0 h-screen w-full bg-[#dbdbee67] z-10 flex justify-center items-center">
+      {children}
     </div>
   );
 }

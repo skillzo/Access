@@ -29,6 +29,6 @@ export const ContextProvider = ({ children }) => {
   ];
 
   currentUser = users[1];
-  const value = useMemo(() => ({ currentUser }), [currentUser]);
+  const value = useMemo(() => ({ currentUser, users }), [currentUser]);
   return <userContext.Provider value={value}>{children}</userContext.Provider>;
 };

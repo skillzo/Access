@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { ReactComponent as Logo } from "../assets/brand/logo.svg";
 import Input from "../components/tinycomp/Input";
 import Wrapper from "../components/Wrapper/Wrapper";
@@ -6,7 +7,26 @@ import { useUser } from "../store/context";
 
 export default function Login() {
   const { currentUser } = useUser();
+  const [details, setDetails] = useState({ username: "", password: "" });
   const name = currentUser?.full_name.split(" ")[1];
+
+  // login user
+
+  console.log(currentUser);
+  console.log(details);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setDetails((prev) => {
+      return { ...prev, [name]: value };
+    });
+  };
+
+  const handlesubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+   
+  };
+
   return (
     <Wrapper>
       <div className="flex justify-between items-center">
@@ -28,18 +48,36 @@ export default function Login() {
             <span className="text-black font-normal">{name}</span>
           </div>
 
-          <div className="space-y-[1.5em] bg-access-blue">
+          {/* login form  */}
+          <form
+            onSubmit={handlesubmit}
+            className="space-y-[1.5em] bg-access-blue"
+          >
             <div className="space-y-[1em]">
-              <Input type="text" placeholder="username" />
-              <Input type="password" placeholder="password" />
+              <Input
+                type="text"
+                placeholder="username"
+                onChange={handleChange}
+                name="username"
+              />
+              <Input
+                type="password"
+                placeholder="password"
+                onChange={handleChange}
+                name="password"
+              />
             </div>
+
+            {/* forgot password */}
             <div className="text-p-blue font-medium text-right">
               Forgot Password?
             </div>
             <button className="bg-[#fe8101] text-white text-sm font-semibold py-[1em] w-full">
               SIGN IN
             </button>
-          </div>
+          </form>
+
+          {/* sign up new user  */}
           <div className="text-center text-sm text-slate-400">
             Don't have an account? &nbsp;
             <span className="font-semibold text-p-blue">Sign Up</span>

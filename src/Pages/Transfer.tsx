@@ -7,22 +7,49 @@ import data from "../store/bankcode.json";
 import axios from "axios";
 import { useQuery } from "react-query";
 import Feedbacks from "../components/feedbacks/Feedbacks";
+import { useNavigate } from "react-router-dom";
+import BeatLoader from "react-spinners/BeatLoader";
 
 export default function Transfer() {
   const [selected, setSelected] = useState("058");
   const [accNum, setAccNum] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
   const [narration, setNarration] = useState("");
+  const [loadTransfer, setLoadTransfer] = useState(false);
 
+  const navigate = useNavigate();
+
+  // bank name dropdown options
   const options: any = [];
   data.map((item) => {
-    const label = item.name;
+    const label = (
+      <div className="flex items-center">
+        <img
+          src={item.logo}
+          alt={item.name}
+          className="w-[40px] h-[40px] rounded-sm object-contain mr-4"
+        />
+        {item.name}
+      </div>
+    );
     const value = item.code;
     options.push({
       label,
       value,
     });
   });
+  //   bank name filter function
+  const customSearch = (option: any, input: string) => {
+    if (
+      option.data.label.props.children[1]
+        .toLowerCase()
+        .includes(input.toLowerCase())
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   /**
    * It returns a promise that resolves to the result of an axios.get() call.
@@ -44,16 +71,15 @@ export default function Transfer() {
   const {
     data: accName,
     isLoading,
-    isFetching,
+    isError,
     refetch,
-  } = useQuery("acc-name", getData, { enabled: false });
+  }: any = useQuery("acc-name", getData, { enabled: false });
 
   // fetch accont name  api call
   const handleChange = (e: any) => {
     setAccNum(e.target.value);
     if (accNum.length == 9) {
       setTimeout(() => {
-        console.log("fetch data");
         refetch();
       }, 500);
     }
@@ -70,8 +96,24 @@ export default function Transfer() {
 
   const isValid = selected && accName && transferAmount && narration;
 
+  // handlesubmit
+  const handleSubmit = () => {
+    setLoadTransfer(true);
+    setTimeout(() => {
+      navigate("/success");
+    }, 5000);
+  };
+
   return (
     <>
+      {/* loading state for transfer */}
+
+      {loadTransfer && (
+        <Feedbacks>
+          <BeatLoader size={50} color="#173f80" />
+        </Feedbacks>
+      )}
+
       {/* frequent transfers */}
       <div className="space-y-2">
         <p className="text-slate-600 font-medium text-sm">Recent Transfers</p>
@@ -87,6 +129,7 @@ export default function Transfer() {
         <Select
           placeholder="Bank"
           options={options}
+          filterOption={customSearch}
           onChange={(e: any) => setSelected(e.value)}
         />
         {/* enter account number and feedback */}
@@ -99,6 +142,11 @@ export default function Transfer() {
           />
           <div className="text-right w-[95%] mx-auto">
             {isLoading && !accName && <div>...</div>}
+            {isError && (
+              <div className="text-[#ee585e] text-sm font-medium ">
+                Account name check failed
+              </div>
+            )}
             {accName && !isLoading && (
               <p className="text-slate-800 text-sm font-medium ">
                 {accName?.data.account_name}
@@ -131,8 +179,10 @@ export default function Transfer() {
             setNarration(e.target.value)
           }
         />
-        <Feedbacks />
-        <Button disabled={!isValid}>Proceed</Button>
+
+        <Button disabled={!isValid} onClick={handleSubmit}>
+          Proceed
+        </Button>
       </div>
     </>
   );

@@ -12,10 +12,10 @@ function App() {
   return (
     <>
       {/* not responsive feedback */}
-      <div className="hidden lg:flex h-screen w-full justify-center items-center text-[#ee585e] ">
-        This is a mobile app, Please switch to a Phone or a tablet
+      <div className="hidden md:flex h-screen w-full justify-center items-center text-[#ee585e] ">
+        This is a mobile app, Please switch to a Phone
       </div>
-      <div className="lg:hidden">
+      <div className="md:hidden">
         <Wrapper>
           <div className="flex items-center">
             <BiArrowBack onClick={() => navigate(-1)} />
