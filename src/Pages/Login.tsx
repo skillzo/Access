@@ -30,15 +30,12 @@ export default function Login() {
   const handlesubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (details?.password === currUser?.password) {
+      localStorage.setItem("currUser", JSON.stringify(currentUser));
       setCurrentUser(currUser);
       setIsAuth(true);
       navigate("/", { replace: true });
     }
   };
-
-  useEffect(() => {
-    localStorage.setItem("currUser", JSON.stringify(currUser));
-  }, [currUser]);
 
   return (
     <Wrapper>
@@ -57,8 +54,12 @@ export default function Login() {
       <div className="h-[80vh] flex justify-center items-center">
         <div className=" w-[80%] mx-auto space-y-[2em]">
           <div className="text-slate-400 font-semibold text-center ">
-            Welcome back,
-            {/* <span className="text-black font-normal">{name}</span> */}
+            {currentUser ? "Welcome back," : "Welcome back"}
+            {currentUser && (
+              <span className="text-black font-normal">
+                {currentUser?.userName}
+              </span>
+            )}
           </div>
 
           {/* login form  */}

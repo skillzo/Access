@@ -25,8 +25,10 @@ export const useUser = () => {
 };
 
 export const ContextProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(users[0]);
-  // JSON.parse(localStorage.getItem("currUser") || "[]")
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(localStorage.getItem("currUser") || "[]")
+  );
+
   const [isAuth, setIsAuth] = useState(false);
 
   const value = useMemo(

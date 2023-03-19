@@ -9,8 +9,10 @@ import { useQuery } from "react-query";
 import Feedbacks from "../components/feedbacks/Feedbacks";
 import { useNavigate } from "react-router-dom";
 import BeatLoader from "react-spinners/BeatLoader";
+import { useUser } from "../store/context";
 
 export default function Transfer() {
+  const { currentUser } = useUser();
   const [selected, setSelected] = useState("058");
   const [accNum, setAccNum] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
@@ -18,6 +20,8 @@ export default function Transfer() {
   const [loadTransfer, setLoadTransfer] = useState(false);
 
   const navigate = useNavigate();
+
+  console.log(currentUser);
 
   // bank name dropdown options
   const options: any = [];
@@ -97,11 +101,15 @@ export default function Transfer() {
   const isValid = selected && accName && transferAmount && narration;
 
   // handlesubmit
-  const handleSubmit = () => {
-    setLoadTransfer(true);
-    setTimeout(() => {
-      navigate("/success");
-    }, 5000);
+  const handleSubmit = (e: any) => {
+    console.log(e);
+    e.preventDefault();
+    // currentUser?.transaction.push(Number(transferAmount));
+    // setLoadTransfer(true);
+    // setTimeout(() => {
+    //   navigate("/success");
+    // }, 5000);
+    console.log("submitted");
   };
 
   return (
@@ -123,9 +131,7 @@ export default function Transfer() {
       </div>
 
       {/* Transfer form  */}
-      <div className="space-y-[1em]">
-        {/* A custom select component that takes in a placeholder, options and
-        onChange function. */}
+      <form className="space-y-[1em]" onSubmit={handleSubmit}>
         <Select
           placeholder="Bank"
           options={options}
@@ -154,6 +160,7 @@ export default function Transfer() {
             )}
           </div>
         </div>
+
         {/* enter amount */}
         <div>
           <Input
@@ -171,6 +178,8 @@ export default function Transfer() {
             </span>
           </p>
         </div>
+
+        {/* enter trasnfer narration */}
         <Input
           type="text"
           placeholder="Narration"
@@ -180,10 +189,8 @@ export default function Transfer() {
           }
         />
 
-        <Button disabled={!isValid} onClick={handleSubmit}>
-          Proceed
-        </Button>
-      </div>
+        <Button>Proceed</Button>
+      </form>
     </>
   );
 }
