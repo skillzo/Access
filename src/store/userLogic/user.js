@@ -4,7 +4,7 @@ class User {
     this.name = name;
     this.pin = pin;
   }
-  //   apis
+  // apis
 }
 
 const skillzo = new User("skillzo", 1111);
