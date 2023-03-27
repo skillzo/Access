@@ -1,4 +1,5 @@
 import React, { ChangeEvent } from "react";
+import { TbMoneybag } from "react-icons/tb";
 
 interface props {
   type: string;
@@ -21,10 +22,13 @@ export default function Input({
   onChange,
 }: props) {
   return (
-    <div>
+    <div className="flex space-x-2 px-[1em] py-[0.8em]  rounded-sm border border-[#bbbcbc8e] focus:border-p-blue">
+      <div>
+        <TbMoneybag />
+      </div>
       <input
         type={type}
-        className={`w-full px-[1em] py-[0.8em]  rounded-sm outline-none border border-[#bbbcbc8e] focus:border-p-blue ${styleProps}`}
+        className={`bg-transparent w-full outline-none  ${styleProps}`}
         placeholder={placeholder}
         value={value}
         maxLength={max}

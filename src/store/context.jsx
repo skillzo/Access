@@ -4,11 +4,30 @@ import { v4 as uuidv4 } from "uuid";
 export const users = [
   {
     id: uuidv4(),
-    full_name: "Chukwu Emmanuel",
+    full_name: "Chukwu Emmanuel Oluwatobi",
     userName: "skillzo",
     transaction: [40000, 700000, -800000, 500000],
     password: "skillzo",
     transfer_24hrs: 2000000,
+    transaction_details: [
+      {
+        transaction_amount: 1000000,
+        transaction_type: "username",
+        transaction_date: "2023-03-27T00:56:50.528Z",
+        sender: "skillo",
+        beneficiary: [
+          {
+            full_name: "Jacinta Uzoechina Ijeoma",
+            account_number: "0098220998",
+            bank_name: "access bank",
+          },
+        ],
+        remark:
+          "TRF/null/FRM EMMANURL OLUWATOBI CHUKWU TO DAMILOLA FUNMILOLA OLAYIWOLA",
+        transaction_ref: "NX0001000100010101",
+        transaction_status: "Successful",
+      },
+    ],
   },
   {
     id: uuidv4(),
