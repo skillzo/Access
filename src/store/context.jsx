@@ -36,8 +36,28 @@ export const users = [
     transaction: [100000, -70000, -800000, 2000000],
     password: "jacy",
     transfer_24hrs: 1050000,
+    transaction_details: [
+      {
+        transaction_amount: -1000000,
+        transaction_type: "username",
+        transaction_date: "2023-03-27T00:56:50.528Z",
+        sender: "skillo",
+        beneficiary: [
+          {
+            full_name: "Jacinta Uzoechina Ijeoma",
+            account_number: "0098220998",
+            bank_name: "access bank",
+          },
+        ],
+        remark:
+          "TRF/null/FRM EMMANURL OLUWATOBI CHUKWU TO DAMILOLA FUNMILOLA OLAYIWOLA",
+        transaction_ref: "NX0001000100010101",
+        transaction_status: "Successful",
+      },
+    ],
   },
 ];
+
 const userContext = createContext();
 export const useUser = () => {
   return useContext(userContext);

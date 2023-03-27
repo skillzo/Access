@@ -89,6 +89,8 @@ export default function BankTransfer() {
   // handlesubmit
   const handleSubmit = (e: any) => {
     e.preventDefault();
+
+    
     // currentUser?.transaction.push(Number(transferAmount));
     // setLoadTransfer(true);
     // setTimeout(() => {

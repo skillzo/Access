@@ -11,6 +11,7 @@ export default function TransactionLimit() {
   const amountUsed = currentUser?.transfer_24hrs;
   const amountLeft = 3000000 - amountUsed;
   const percentageUsed = `${Math.floor((amountUsed / 3000000) * 100)}%`;
+
   return (
     <div className="text-xs text-slate-600 font-medium space-y-[0.5em]">
       <p>Daily Transaction Limit: &#8358; 3,000,0000</p>

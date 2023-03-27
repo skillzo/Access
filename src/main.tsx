@@ -11,6 +11,8 @@ import Transactions from "./Pages/Transactions";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ContextProvider } from "./store/context";
 import OnSucess from "./Pages/OnSucess";
+import NotFoundPage from "./Pages/404";
+import Settings from "./Pages/Settings";
 // initailize react router v6.8.2
 const router = createBrowserRouter([
   {
@@ -35,6 +37,14 @@ const router = createBrowserRouter([
   {
     path: "success",
     element: <OnSucess />,
+  },
+  {
+    path: "settings",
+    element: <Settings />,
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
 

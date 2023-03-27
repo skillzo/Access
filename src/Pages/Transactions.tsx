@@ -11,9 +11,14 @@ export default function Transactions() {
         11 Mar 2023, SATURDAY
       </p>
       <div className="border bg-white w-full  space-y-2">
-        {user?.transaction.map((item: number) => {
-          if (item < 0) return <Info key={uuidv4()} moneyOut amount={item} />;
-          return <Info key={uuidv4()} amount={item} />;
+        {user?.transaction_details.map((item: any) => {
+          return (
+            <Info
+              key={uuidv4()}
+              amount={item.transaction_amount}
+              remarks={item.remark}
+            />
+          );
         })}
       </div>
     </div>
