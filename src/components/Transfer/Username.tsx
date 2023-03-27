@@ -61,7 +61,6 @@ export default function Username() {
     transaction_status: "Successful",
   };
 
-  console.log(currentUser?.transfer_24hrs + amountTransferredByUser);
   // make transfer
   const handleSubmit = (e: any) => {
     e.preventDefault();

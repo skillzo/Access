@@ -13,10 +13,12 @@ import { ContextProvider } from "./store/context";
 import OnSucess from "./Pages/OnSucess";
 import NotFoundPage from "./Pages/404";
 import Settings from "./Pages/Settings";
+import ProtectedRoutes from "./routes/ProtectedRoutes";
 // initailize react router v6.8.2
 const router = createBrowserRouter([
   {
     path: "/",
+
     element: <App />,
     errorElement: <Error />,
     children: [
@@ -31,10 +33,6 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/login",
-    element: <Login />,
-  },
-  {
     path: "success",
     element: <OnSucess />,
   },
@@ -45,6 +43,11 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <NotFoundPage />,
+  },
+
+  {
+    path: "/login",
+    element: <Login />,
   },
 ]);
 

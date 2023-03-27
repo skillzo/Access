@@ -8,7 +8,7 @@ import Wrapper from "../components/Wrapper/Wrapper";
 import { useUser } from "../store/context";
 
 export default function Login() {
-  const { currentUser, users, setCurrentUser, setIsAuth } = useUser();
+  const { currentUser, users, setCurrentUser, setIsAuth, isAuth } = useUser();
   const [details, setDetails] = useState({ username: "", password: "" });
   // const name = currentUser?.full_name.split(" ")[1] || "skillzo";
 
@@ -30,9 +30,9 @@ export default function Login() {
   const handlesubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (details?.password === currUser?.password) {
+      setIsAuth(true);
       localStorage.setItem("currUser", JSON.stringify(currentUser));
       setCurrentUser(currUser);
-      setIsAuth(true);
       navigate("/", { replace: true });
     }
   };

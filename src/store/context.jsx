@@ -67,8 +67,9 @@ export const ContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(
     JSON.parse(localStorage.getItem("currUser") || "[]")
   );
+  const loginState = localStorage.getItem("isAuth") || null;
 
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(loginState);
 
   const value = useMemo(
     () => ({
@@ -78,7 +79,7 @@ export const ContextProvider = ({ children }) => {
       isAuth,
       setIsAuth,
     }),
-    [currentUser, isAuth, setIsAuth]
+    [currentUser, isAuth]
   );
   return <userContext.Provider value={value}>{children}</userContext.Provider>;
 };
