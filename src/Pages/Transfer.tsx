@@ -25,8 +25,7 @@ export default function Transfer() {
         </div>
       </div>
 
-      {/* {usernameTransfer ? <Username /> : <BankTransfer />} */}
-      <BankTransfer />
+      {usernameTransfer ? <Username /> : <BankTransfer />}
     </>
   );
 }

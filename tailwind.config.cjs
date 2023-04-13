@@ -7,6 +7,7 @@ module.exports = {
         "p-blue": "#173f80",
         "p-ash": "#878787",
         "td-ash": "#878787",
+        "p-orange": "#fe8101",
       },
     },
   },
@@ -15,3 +16,4 @@ module.exports = {
 
 // colour guide
 // p = primary
+// td = text ash

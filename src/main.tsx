@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Error from "./Pages/Error.jsx";
+import Error from "./Pages/Error.js";
 import "./index.css";
 import Login from "./Pages/Login";
 import { IconContext } from "react-icons/lib";
@@ -14,6 +14,7 @@ import OnSucess from "./Pages/OnSucess";
 import NotFoundPage from "./Pages/404";
 import Settings from "./Pages/Settings";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
+import SignUp from "./Pages/SignUp";
 // initailize react router v6.8.2
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
   },
 ]);
 

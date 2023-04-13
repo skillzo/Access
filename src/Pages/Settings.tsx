@@ -10,6 +10,7 @@ export default function Settings() {
   const navigate = useNavigate();
 
   const { isAuth, setIsAuth } = useUser();
+  console.log("settings", isAuth);
 
   return (
     <Wrapper>
@@ -29,7 +30,12 @@ export default function Settings() {
         <div className="w-full">
           <div className="flex justify-between items-center w-[80%] mx-auto">
             <p>Logout</p>
-            <div onClick={() => setIsAuth(false)}>
+            <div
+              onClick={() => {
+                console.log("log out ");
+                setIsAuth(false);
+              }}
+            >
               <FiLogOut />
             </div>
           </div>

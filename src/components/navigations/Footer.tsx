@@ -27,7 +27,7 @@ export default function Footer() {
   ];
   return (
     <IconContext.Provider value={{ size: "30px" }}>
-      <div className="fixed bottom-0 w-full border-t border bg-white flex justify-center items-center space-x-6 py-[1em]">
+      <div className="fixed z-1 bottom-0 w-full border-t border bg-white flex justify-center items-center space-x-6 py-[1em]">
         {navList.map((item: any) => {
           return <NavItem key={uuidv4()} icon={item.icon} path={item.path} />;
         })}

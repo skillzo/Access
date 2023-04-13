@@ -12,6 +12,7 @@ export default function Dashboard() {
     currentUser?.transaction.reduce((a: any, b: any) => a + b, 0)
   );
 
+  console.log("dashboard", isAuth);
   // save current user in localstorage
   useEffect(() => {
     setIsAuth(true);

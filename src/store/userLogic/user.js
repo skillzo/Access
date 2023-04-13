@@ -5,6 +5,7 @@ class User {
     this.pin = pin;
   }
   // apis
+  createUser() {}
 }
 
 const skillzo = new User("skillzo", 1111);

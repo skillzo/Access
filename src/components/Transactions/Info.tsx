@@ -1,18 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdOutlineConnectWithoutContact } from "react-icons/md";
 import { TfiCreditCard } from "react-icons/tfi";
 import { formatNumber } from "../../utils/formatNumber";
+import Receipt from "./Receipt";
 
 interface props {
   moneyOut?: boolean;
   amount: any;
   remarks: string;
+  item: any;
 }
 
-export default function Info({ moneyOut, amount, remarks }: props) {
+export default function Info({ amount, remarks, item }: props) {
+  const [showReciept, setShowReciept] = useState(false);
   if (amount < 0)
     return (
-      <div className="flex justify-between items-center p-4 border-b">
+      <div
+        onClick={() => setShowReciept(true)}
+        className="flex justify-between items-center p-4 border-b"
+      >
+        {showReciept && (
+          <Receipt
+            item={item}
+            setShowReciept={setShowReciept}
+            showReciept={showReciept}
+          />
+        )}
         <div className="bg-[#e0e5ee] p-3 ">
           <MdOutlineConnectWithoutContact color="#173f80" />
         </div>
@@ -24,7 +37,10 @@ export default function Info({ moneyOut, amount, remarks }: props) {
     );
 
   return (
-    <div className="flex justify-between items-center p-4 border-b">
+    <div
+      onClick={() => console.log(item)}
+      className="flex justify-between items-center p-4 border-b"
+    >
       <div className="bg-[#e0e5ee] p-3 ">
         <TfiCreditCard color="#173f80" />
       </div>

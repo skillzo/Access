@@ -17,6 +17,7 @@ export default function Transactions() {
               key={uuidv4()}
               amount={item.transaction_amount}
               remarks={item.remark}
+              item={item}
             />
           );
         })}

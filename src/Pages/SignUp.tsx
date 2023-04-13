@@ -1,21 +1,18 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-import Input from "../components/tinycomp/Input";
+import React, { useState } from "react";
 import Wrapper from "../components/Wrapper/Wrapper";
-import { useUser } from "../store/context";
 import Logo from "../assets/brand/Logo";
+import Input from "../components/tinycomp/Input";
+import { Link } from "react-router-dom";
 
-export default function Login() {
-  const { currentUser, users, setCurrentUser, setIsAuth, isAuth } = useUser();
-  const [details, setDetails] = useState({ username: "", password: "" });
-  // const name = currentUser?.full_name.split(" ")[1] || "skillzo";
+export default function SignUp() {
+  const [details, setDetails] = useState({
+    first_name: "",
+    last_name: "",
+    username: "",
+    password: "",
+    password2: "",
+  });
 
-  const navigate = useNavigate();
-
-  // set username and password
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setDetails((prev) => {
@@ -23,21 +20,7 @@ export default function Login() {
     });
   };
 
-  // login user
-  const currUser = users.find(
-    (item: any) => item.userName === details.username.toLowerCase()
-  );
-
-  const handlesubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (details?.password === currUser?.password) {
-      setIsAuth(true);
-      localStorage.setItem("currUser", JSON.stringify(currentUser));
-      setCurrentUser(currUser);
-      navigate("/", { replace: true });
-    }
-  };
-
+  console.log(details);
   return (
     <Wrapper>
       <div className="flex justify-between items-center">
@@ -55,38 +38,49 @@ export default function Login() {
       <div className="h-[80vh] flex justify-center items-center">
         <div className=" w-[80%] mx-auto space-y-[2em]">
           <div className="text-slate-400 font-semibold text-center ">
-            {currentUser ? "Welcome back," : "Welcome back"}
-            {currentUser && (
-              <span className="text-black font-normal">
-                {currentUser?.userName}
-              </span>
-            )}
+            FREE MONEY FOR EVERYONE
           </div>
 
           {/* login form  */}
           <form
-            onSubmit={handlesubmit}
+            onSubmit={(e) => {
+              console.log(details);
+            }}
             className="space-y-[1.5em] bg-access-blue"
           >
             <div className="space-y-[1em]">
               <Input
                 type="text"
-                placeholder="username"
+                placeholder="First Name"
+                onChange={handleChange}
+                name="first_name"
+              />
+              <Input
+                type="text"
+                placeholder="Last Name"
+                onChange={handleChange}
+                name="last_name"
+              />
+              <Input
+                type="text"
+                placeholder="Username"
                 onChange={handleChange}
                 name="username"
               />
               <Input
                 type="password"
-                placeholder="password"
+                placeholder="Password"
                 onChange={handleChange}
                 name="password"
               />
+              <Input
+                type="password"
+                placeholder="Confirm Password"
+                onChange={handleChange}
+                name="password2"
+              />
             </div>
 
-            {/* forgot password */}
-            <div className="text-p-blue font-medium text-right">
-              Forgot Password?
-            </div>
             <button className="bg-p-orange text-white text-sm font-semibold py-[1em] w-full">
               SIGN IN
             </button>
@@ -94,8 +88,10 @@ export default function Login() {
 
           {/* sign up new user  */}
           <div className="text-center text-sm text-slate-400">
-            Don't have an account? &nbsp;
-            <span className="font-semibold text-p-blue">Sign Up</span>
+            Already have an account? &nbsp;
+            <Link to="/login">
+              <span className="font-semibold text-p-blue">Sign In</span>
+            </Link>
           </div>
         </div>
       </div>

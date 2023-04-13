@@ -22,30 +22,35 @@ export default function Username() {
   const handleChange = (e: any) => {
     setUserName(e.target.value);
   };
-  const beneficiary = users.find(
-    (item: any) => item.userName === userName?.toLowerCase()
-  );
 
   const handleAmount = (e: any) => {
     setTransferAmount(addComma(e.target.value));
   };
+
+  // DEFINE VARIBALES HERE
   const amountTransferredByUser = removeCommas(transferAmount);
 
+  const beneficiary = users?.find(
+    (item: any) => item.userName === userName?.toLowerCase()
+  );
   const date = new Date();
   const currDate = date.toJSON();
 
+  // this details will render on the recievers end
   const beneficiarytrxdetails: any = {
     transaction_amount: amountTransferredByUser,
-    transaction_type: "username",
+    transaction_type: "USERNAME",
     transaction_date: currDate,
     sender: currentUser?.userName,
     remark: `via Access ${narration}`,
     transaction_ref: uuidv4(),
     transaction_status: "Successful",
   };
+
+  // this details will render on the senders end
   const trxdetails: any = {
     transaction_amount: -amountTransferredByUser,
-    transaction_type: "username",
+    transaction_type: "USERNAME",
     transaction_date: currDate,
     sender: currentUser?.userName,
     beneficiary: [
@@ -61,7 +66,7 @@ export default function Username() {
     transaction_status: "Successful",
   };
 
-  // make transfer
+  // make transfer using username
   const handleSubmit = (e: any) => {
     e.preventDefault();
     currentUser?.transaction.push(-amountTransferredByUser);
@@ -72,18 +77,22 @@ export default function Username() {
     setLoadTransfer(true);
     setTimeout(() => {
       navigate("/success");
-    }, 5000);
+    }, 1000);
     if (currentUser != undefined)
       return (currentUser.transfer_24hrs += amountTransferredByUser);
   };
 
+  // basic checks before tranfer
   const balance = currentUser?.transaction.reduce(
     (a: number, b: number): number => a + b,
     0
   );
+  const userEnteredThierName =
+    userName.toLowerCase().trim() === currentUser?.userName;
+
   const isValid =
     Boolean(beneficiary?.full_name) &&
-    userName.toLowerCase() !== beneficiary?.userName &&
+    !userEnteredThierName &&
     Boolean(balance > amountTransferredByUser) &&
     narration;
 
@@ -111,18 +120,15 @@ export default function Username() {
                 Account name check failed
               </p>
             )}
-            {userName.toLowerCase() === beneficiary?.userName && (
+            {userEnteredThierName && (
               <p className="text-[#ee585e] text-sm font-medium ">
                 You cannot trasnfer to yourself
               </p>
             )}
 
-            {beneficiary &&
-              userName.toLowerCase() !== beneficiary?.userName && (
-                <p className="text-slate-800 text-sm font-medium ">
-                  {beneficiary?.full_name}
-                </p>
-              )}
+            <p className="text-slate-800 text-sm font-medium ">
+              {beneficiary?.full_name}
+            </p>
           </div>
         </div>
 

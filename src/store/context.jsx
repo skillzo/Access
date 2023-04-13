@@ -67,6 +67,7 @@ export const ContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(
     JSON.parse(localStorage.getItem("currUser") || "[]")
   );
+
   const loginState = localStorage.getItem("isAuth") || null;
 
   const [isAuth, setIsAuth] = useState(loginState);
