@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 
-interface props {
+type props = {
   type: string;
   placeholder: string;
   value?: string;
@@ -9,7 +9,9 @@ interface props {
   disabled?: boolean;
   name?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-}
+  onBlur?: (e: ChangeEvent<HTMLInputElement>) => void;
+};
+
 export default function Input({
   type,
   placeholder,
@@ -19,6 +21,8 @@ export default function Input({
   disabled,
   name,
   onChange,
+  onBlur,
+  ...rest
 }: props) {
   return (
     <input
@@ -30,6 +34,8 @@ export default function Input({
       name={name}
       disabled={disabled}
       onChange={onChange}
+      onBlur={onBlur}
+      {...rest}
     />
   );
 }

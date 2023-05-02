@@ -30,9 +30,11 @@ const router = createBrowserRouter(
         <Route path="/" element={<App />} errorElement={<Error />}>
           <Route index element={<Transfer />} />
           <Route path="/transactions" element={<Transactions />} />
-          <Route path="/success" element={<OnSucess />} />
-          <Route path="/settings" element={<Settings />} />
         </Route>
+      </Route>
+      <Route element={<ProtectedRoutes />}>
+        <Route path="/success" element={<OnSucess />} />
+        <Route path="/settings" element={<Settings />} />
       </Route>
 
       <Route path="/login" element={<Login />} />

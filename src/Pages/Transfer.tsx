@@ -4,8 +4,8 @@ import Username from "../components/Transfer/Username";
 
 export default function Transfer() {
   const [usernameTransfer, setUsernameTransfer] = useState(false);
-  const active = "text-td-ash";
-  const notActive = "font-semibold text-p-blue";
+  const active = "text-td-ash w-max";
+  const notActive = "font-semibold text-p-blue w-max";
 
   return (
     <>

@@ -1,24 +1,27 @@
 import React from "react";
+import Logo from "../../assets/brand/Logo";
 
-export default function Receipt({ item, setShowReciept, showReciept }: any) {
+export default function Receipt({ item, setShowReciept }: any) {
+  console.log(item);
   return (
     <div
-      onClick={() => {
-        setShowReciept(false);
-      }}
+      onClick={() => setShowReciept(false)}
       className="fixed top-0 left-0 h-screen w-full z-10 bg-[#dbdbee67] flex justify-center items-center"
     >
-      {/* Reciept here */}
       <div className="p-12 w-[98%] mx-auto bg-white space-y-6 ">
-        <div className="flex justify-between items-center">
-          <p>Access</p>
-          <p>Logo</p>
+        <div className="flex flex-start">
+          <div className="w-[100px] h-max">
+            <Logo />
+          </div>
         </div>
 
         <div className="space-y-3 text-center">
           <p className="text-p-blue font-semibold">Transaction Receipt</p>
-          <p className="text-p-ash text-sm">
-            Generated from AccessMore on 13/04/23 04:47:25
+          <p className="text-p-ash text-xs ">
+            Generated from AccessMore on &#160;
+            {item?.transaction_date?.slice(0, 10)}
+            &#160;
+            {item?.transaction_date?.slice(12, 19)}
           </p>
         </div>
 

@@ -14,9 +14,13 @@ import { addComma } from "../../utils/AddCommas";
 import { removeCommas } from "../../utils/RemoveCommas";
 import { formatNumber } from "../../utils/formatNumber";
 import { v4 as uuidv4 } from "uuid";
+import { arrayUnion, doc, increment, updateDoc } from "firebase/firestore";
+import { db } from "../../store/Firebase/Firebase";
 
 export default function BankTransfer() {
-  const { currentUser, getUsers, addUser } = useUser();
+  const date = new Date();
+  const currDate = date.toJSON();
+  const { currentUser, getUsers } = useUser();
   const [selected, setSelected] = useState("");
   const [accNum, setAccNum] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
@@ -24,6 +28,10 @@ export default function BankTransfer() {
   const [loadTransfer, setLoadTransfer] = useState(false);
 
   const navigate = useNavigate();
+  const handleAmount = (e: any) => {
+    setTransferAmount(addComma(e.target.value));
+  };
+  const amountTransferredByUser = removeCommas(transferAmount);
 
   // bank name dropdown options
   const options: any = [];
@@ -44,7 +52,8 @@ export default function BankTransfer() {
       value,
     });
   });
-  //   bank custom name filter function
+
+  //  custom bank name filter function
   const customSearch = (option: any, input: string) => {
     if (
       option.data.label.props.children[1]
@@ -57,62 +66,38 @@ export default function BankTransfer() {
     }
   };
 
+  // get bank name from account number
   const getData: any = async () => {
     const url = `https://maylancer.org/api/nuban/api.php?account_number=${accNum.trim()}&bank_code=${selected}`;
     return axios.get(url);
   };
-
   const {
     data: accName,
     isLoading,
     isError,
+    error,
     refetch,
   }: any = useQuery("acc-name", getData, { enabled: false });
 
   // fetch account name using api
   const handleChange = (e: any) => {
     setAccNum(e.target.value);
-    if (accNum.length == 9) {
+    if (accNum.length == 9 && selected) {
       setTimeout(() => {
         refetch();
       }, 500);
     }
   };
 
-  const handleAmount = (e: any) => {
-    setTransferAmount(addComma(e.target.value));
-  };
-  const amountTransferredByUser = removeCommas(transferAmount);
-
+  console.log(accName);
   // ///////////////////////////////////////////////////////////////////////////////////
   // DEFINE VARIABLES HERE
-  // validate transfer
-  const isValid = selected && accName && transferAmount && narration;
 
   // recievers full name
   const full_name = accName?.data.account_name;
-  // balance
-  const balance = currentUser?.transaction.reduce(
-    (a: number, b: number): number => a + b,
-    0
-  );
-  // current date
-  const date = new Date();
-  const currDate = date.toJSON();
-
-  // transaction reciprt for the receiver
-  const beneficiarytrxdetails: any = {
-    transaction_amount: amountTransferredByUser,
-    transaction_type: "INTER-BANK",
-    transaction_date: currDate,
-    sender: currentUser?.userName,
-    remark: `via Access ${narration}`,
-    transaction_ref: uuidv4(),
-    transaction_status: "Successful",
-  };
+  const currRef = doc(db, "users", `${currentUser?.userName?.trim()}id`);
 
   // transaction reciept for the sender
-  // this details will render on the senders end
   const trxdetails: any = {
     transaction_amount: -amountTransferredByUser,
     transaction_type: "INTER-BANK",
@@ -132,18 +117,30 @@ export default function BankTransfer() {
   };
 
   // initiate transfer to bank account
-  const handleSubmit = (e: any) => {
+  const transferFunds = async (e: any) => {
     e.preventDefault();
-    currentUser?.transaction.push(-amountTransferredByUser);
+
+    // update Firebase
+    await updateDoc(currRef, {
+      balance: increment(-amountTransferredByUser),
+      transfer_24hrs: increment(-amountTransferredByUser),
+      transaction_details: arrayUnion(trxdetails),
+    });
+
+    // updatelocalStorage
     currentUser?.transaction_details.push(trxdetails);
+    currentUser.transfer_24hrs += amountTransferredByUser;
+    currentUser.balance += -amountTransferredByUser;
+    localStorage.setItem("currUser", JSON.stringify(currentUser));
     // initiate transfer sequence
-    setLoadTransfer(true);
-    setTimeout(() => {
-      navigate("/success");
-    }, 1000);
-    if (currentUser != undefined)
-      return (currentUser.transfer_24hrs += amountTransferredByUser);
+    // setLoadTransfer(true);
+    // setTimeout(() => {
+    //   navigate("/success");
+    // }, 1000);
   };
+
+  // validate transfer
+  const isValid = selected && accName && transferAmount && narration;
   return (
     <>
       {/* loading state for transfer */}
@@ -163,7 +160,7 @@ export default function BankTransfer() {
 
       <button onClick={getUsers}> Get users</button>
       {/* Transfer form  */}
-      <form className="space-y-[1em]" onSubmit={handleSubmit}>
+      <form className="space-y-[1em]" onSubmit={transferFunds}>
         <Select
           placeholder="Bank"
           options={options}
@@ -179,7 +176,12 @@ export default function BankTransfer() {
           />
           <div className="text-right w-[95%] mx-auto">
             {isLoading && !accName && <div>...</div>}
-            {isError && (
+            {accNum && !selected && (
+              <div className="text-[#ee585e] text-sm font-medium ">
+                You know you need a bank right
+              </div>
+            )}
+            {!isLoading && accName?.data?.message && (
               <div className="text-[#ee585e] text-sm font-medium ">
                 Account name check failed
               </div>
@@ -202,7 +204,7 @@ export default function BankTransfer() {
           />
 
           {/* max transfer */}
-          {amountTransferredByUser > balance && (
+          {amountTransferredByUser > currentUser?.balance && (
             <p className="text-[#ee585e] text-sm font-medium text-right ">
               Max Amount Exceeded
             </p>
@@ -211,7 +213,7 @@ export default function BankTransfer() {
           <p className="text-slate-400 text-xs">
             Maximum Amount:
             <span className="text-p-blue font-medium text-sm ml-2">
-              &#8358; {formatNumber(balance)}
+              &#8358; {formatNumber(currentUser?.balance)}
             </span>
           </p>
         </div>

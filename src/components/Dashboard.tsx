@@ -8,9 +8,6 @@ import { useEffect } from "react";
 export default function Dashboard() {
   const [showBalance, setShowBalance] = useState(false);
   const { currentUser } = useUser();
-  const balance = formatNumber(
-    currentUser?.transaction.reduce((a: any, b: any) => a + b, 0)
-  );
 
   // save current user in localstorage
   useEffect(() => {
@@ -25,7 +22,7 @@ export default function Dashboard() {
             {showBalance ? (
               currentUser?.userName
             ) : (
-              <p>&#8358; {balance || 0}</p>
+              <p>&#8358; {formatNumber(currentUser?.balance) || 0}</p>
             )}
           </div>
           <div>

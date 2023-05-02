@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../store/context";
 import Button from "../tinycomp/Button";
@@ -9,31 +9,80 @@ import { v4 as uuidv4 } from "uuid";
 import BeatLoader from "react-spinners/BeatLoader";
 import Feedbacks from "../feedbacks/Feedbacks";
 import { formatNumber } from "../../utils/formatNumber";
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  increment,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../../store/Firebase/Firebase";
+import Toast from "../Toast";
+import { toast } from "react-toastify";
+import useDebounce from "../../utils/hooks/useDebounce";
 
 export default function Username() {
+  const date = new Date();
+  const currDate = date.toJSON();
+  const navigate = useNavigate();
   const { currentUser, users } = useUser();
   const [userName, setUserName] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
   const [narration, setNarration] = useState("");
   const [loadTransfer, setLoadTransfer] = useState(false);
-  const navigate = useNavigate();
+  const [beneInitialState, setBeneInitialState] = useState<Object | any>({});
 
   const handleChange = (e: any) => {
     setUserName(e.target.value);
   };
-
   const handleAmount = (e: any) => {
     setTransferAmount(addComma(e.target.value));
   };
 
   // DEFINE VARIBALES HERE
   const amountTransferredByUser = removeCommas(transferAmount);
-
   const beneficiary = users?.find(
     (item: any) => item.userName === userName?.toLowerCase()
   );
-  const date = new Date();
-  const currDate = date.toJSON();
+
+  // //////////////////////////////////////
+
+  // get objects to be updated in firebase
+  const beneficiary_user_id = useDebounce(
+    `${beneficiary?.userName?.trim()}id`,
+    2000
+  );
+  const beneRef = doc(db, "users", beneficiary_user_id);
+  const currRef = doc(db, "users", `${currentUser?.userName?.trim()}id`);
+
+  // get initial state from firebase
+  const getBeneInitialState = async () => {
+    if (beneficiary_user_id)
+      try {
+        const response = await getDoc(beneRef);
+        if (response?.data() === undefined) {
+          toast.error("Beneficiary does not exist");
+        }
+        setBeneInitialState(response?.data());
+        return;
+      } catch (e: any) {
+        toast.error("Beneficiary does not exist");
+      }
+  };
+  // const getCurrInitialState = async () => {
+  //   try {
+  //     const response = await getDoc(currRef);
+  //     if (response?.data() === undefined) {
+  //       toast.error(
+  //         "Error encounted while fetching your account. Logout and try again"
+  //       );
+  //     }
+  //     setCurrInitialState(response?.data());
+  //     return;
+  //   } catch (e: any) {
+  //     toast.error("Cant get your account. Try again");
+  //   }
+  // };
 
   // transfer details for receiver
   const beneficiarytrxdetails: any = {
@@ -45,7 +94,6 @@ export default function Username() {
     transaction_ref: uuidv4(),
     transaction_status: "Successful",
   };
-
   // transfer details for sender
   const trxdetails: any = {
     transaction_amount: -amountTransferredByUser,
@@ -66,52 +114,63 @@ export default function Username() {
   };
 
   // make transfer using username
-  const handleSubmit = (e: any) => {
+  const transferFunds = async (e: any) => {
     e.preventDefault();
-    currentUser?.transaction.push(-amountTransferredByUser);
-    beneficiary?.transaction.push(amountTransferredByUser);
-    currentUser?.transaction_details.push(trxdetails);
-    beneficiary?.transaction_details.push(beneficiarytrxdetails);
 
-    console.log(users);
-    // initiate transfer sequence
-    // setLoadTransfer(true);
-    // setTimeout(() => {
-    //   navigate("/success");
-    // }, 1000);
-    if (currentUser != undefined)
-      return (currentUser.transfer_24hrs += amountTransferredByUser);
+    // update firestore
+    try {
+      await updateDoc(currRef, {
+        balance: increment(-amountTransferredByUser),
+        transfer_24hrs: increment(-amountTransferredByUser),
+        transaction_details: arrayUnion(trxdetails),
+      });
+      await updateDoc(beneRef, {
+        balance: increment(amountTransferredByUser),
+        transfer_24hrs: increment(-amountTransferredByUser),
+        transaction_details: arrayUnion(beneficiarytrxdetails),
+      });
+
+      // update localState and initiate transfer sequence
+      currentUser?.transaction_details.push(trxdetails);
+      currentUser.transfer_24hrs += amountTransferredByUser;
+      currentUser.balance += -amountTransferredByUser;
+      localStorage.setItem("currUser", JSON.stringify(currentUser));
+      setLoadTransfer(true);
+      setTimeout(() => {
+        navigate("/success");
+      }, 1000);
+      return;
+    } catch (e) {
+      toast.error("Transafer Failed ");
+    }
   };
 
   // basic checks before tranfer
-  const balance = currentUser?.transaction.reduce(
-    (a: number, b: number): number => a + b,
-    0
-  );
   const userEnteredThierName =
     userName.toLowerCase().trim() === currentUser?.userName;
-
   const isValid =
     Boolean(beneficiary?.full_name) &&
     !userEnteredThierName &&
-    Boolean(balance > amountTransferredByUser) &&
-    narration;
+    Boolean(currentUser?.balance > amountTransferredByUser) &&
+    narration &&
+    Boolean(beneInitialState?.id);
 
   return (
     <>
+      <Toast />
       {/* loading state for transfer */}
       {loadTransfer && (
         <Feedbacks>
           <BeatLoader size={50} color="#173f80" />
         </Feedbacks>
       )}
-      <form className="space-y-[1em]" onSubmit={handleSubmit}>
-        {/* enter account number and feedback */}
+      <form className="space-y-[1em]" onSubmit={transferFunds}>
         <div>
           <Input
             type="text"
             placeholder="Beneficiary Username"
             value={userName}
+            onBlur={getBeneInitialState}
             onChange={handleChange}
           />
 
@@ -127,9 +186,11 @@ export default function Username() {
               </p>
             )}
 
-            <p className="text-slate-800 text-sm font-medium ">
-              {beneficiary?.full_name}
-            </p>
+            {!userEnteredThierName && (
+              <p className="text-slate-800 text-sm font-medium ">
+                {beneficiary?.full_name}
+              </p>
+            )}
           </div>
         </div>
 
@@ -143,8 +204,7 @@ export default function Username() {
           />
 
           {/* max transfer */}
-
-          {amountTransferredByUser > balance && (
+          {amountTransferredByUser > currentUser?.balance && (
             <p className="text-[#ee585e] text-sm font-medium text-right ">
               Max Amount Exceeded
             </p>
@@ -153,7 +213,7 @@ export default function Username() {
           <p className="text-slate-400 text-xs">
             Maximum Amount:
             <span className="text-p-blue font-medium text-sm ml-2">
-              &#8358; {formatNumber(balance)}
+              &#8358; {formatNumber(currentUser?.balance)}
             </span>
           </p>
         </div>

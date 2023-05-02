@@ -10,7 +10,7 @@ export const ContextProvider = ({ children }) => {
     {
       id: "4rtxveVae5OFbdZQdulv",
       password: "jacy",
-      transaction: [100000, -70000, -800000, 2000000],
+      balance: 300000,
       full_name: "Uzoechina Jacinta Ijeoma",
       transaction_details: [
         {
@@ -56,37 +56,10 @@ export const ContextProvider = ({ children }) => {
       ],
       userName: "skillzo",
       password: "skillzo",
+      balance: 3000000,
       id: "T1XwocBvjQHmbRuziPpc",
       transfer_24hrs: 2000000,
       full_name: "Chukwu Emmanuel Oluwatobi",
-      transaction: [40000, 700000, -800000, 500000],
-    },
-    {
-      transaction_details: [],
-      transfer_24hrs: 0,
-      full_name: "augustmiles",
-      id: "o4EII1M9lTdCWea1IUm0",
-      userName: "skillzo2",
-      transaction: [0],
-      password: "skillzo",
-    },
-    {
-      id: "pcqZUBfEUDjDG50zMiR3",
-      password: "skillzo",
-      transaction: [3000000],
-      full_name: "august4miles4",
-      transfer_24hrs: 0,
-      userName: "skillzo4",
-      transaction_details: [],
-    },
-    {
-      transfer_24hrs: 0,
-      full_name: "augustmiles",
-      transaction_details: [],
-      transaction: [0],
-      password: "skillzo",
-      id: "wV69pyhfuAAzXuqbobhs",
-      userName: "skillzo1",
     },
   ];
   const [users, setUsers] = useState(initialUsers);
@@ -105,22 +78,6 @@ export const ContextProvider = ({ children }) => {
   //   getUsers();
   // }, []);
 
-  console.log("users", users);
-  //
-  // function to signup a new account
-  const addUser = async ({ fullName, userName, password }) => {
-    const userSchema = {
-      id: uuidv4(),
-      full_name: fullName,
-      userName,
-      transaction: [0],
-      password,
-      transfer_24hrs: 0,
-      transaction_details: [],
-    };
-    await addDoc(usersCollection, userSchema);
-  };
-
   const value = useMemo(
     () => ({
       currentUser,
@@ -129,7 +86,6 @@ export const ContextProvider = ({ children }) => {
       users,
       setUsers,
       getUsers,
-      addUser,
     }),
     [currentUser, users]
   );

@@ -28,7 +28,6 @@ export default function Login() {
       item.userName.toLowerCase() === details.username.toLowerCase()
   );
 
-  console.log(currUser);
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (details?.username !== currUser?.userName) {
@@ -42,7 +41,10 @@ export default function Login() {
     if (details?.password === currUser?.password) {
       localStorage.setItem("currUser", JSON.stringify(currUser));
       setCurrentUser(currUser);
-      navigate("/", { replace: true });
+      toast.success("Hold on dashboard coming up");
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 3000);
     }
   };
 

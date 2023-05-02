@@ -5,10 +5,11 @@ import Input from "../components/tinycomp/Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../store/context";
 import { v4 as uuidv4 } from "uuid";
-import { addDoc, collection } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../store/Firebase/Firebase";
 import Toast from "../components/Toast";
 import { toast } from "react-toastify";
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLater";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -19,7 +20,8 @@ export default function SignUp() {
     username: "",
     password: "",
   });
-  const usersCollection = collection(db, "users");
+  const user_id = `${details.username?.trim()}id`;
+  const usersCollection = doc(db, "users", user_id);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,13 +30,16 @@ export default function SignUp() {
     });
   };
 
-  const handleSubmit = async (e: any) => {
+  const signUp = async (e: any) => {
     e.preventDefault();
     const userSchema = {
       id: uuidv4(),
-      full_name: details.first_name + details.last_name,
-      userName: details.username,
-      transaction: [3000000],
+      full_name:
+        capitalizeFirstLetter(details.first_name) +
+        " " +
+        capitalizeFirstLetter(details.last_name),
+      userName: details.username?.trim(),
+      balance: 3000000,
       password: details.password,
       transfer_24hrs: 0,
       transaction_details: [],
@@ -47,13 +52,13 @@ export default function SignUp() {
       toast.error("username is already taken");
       return;
     }
-    await addDoc(usersCollection, userSchema);
+    await setDoc(usersCollection, userSchema);
     localStorage.setItem("currUser", JSON.stringify(userSchema));
     setCurrentUser(userSchema);
-    toast.success("yo!!! welcome to our bank'😒 ");
-    setTimeout(() => {
-      navigate("/", { replace: true });
-    }, 3000);
+    toast.success("welcome to our bank");
+    // setTimeout(() => {
+    //   navigate("/", { replace: true });
+    // }, 3000);
   };
 
   return (
@@ -78,10 +83,7 @@ export default function SignUp() {
           </div>
 
           {/* login form  */}
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-[1.5em] bg-access-blue"
-          >
+          <form onSubmit={signUp} className="space-y-[1.5em] bg-access-blue">
             <div className="space-y-[1em]">
               <Input
                 type="text"

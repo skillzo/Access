@@ -6,7 +6,6 @@ export default function ProtectedRoutes(): any {
   const location = useLocation();
   const { currentUser } = useUser();
 
-  console.log(currentUser);
   return currentUser?.id ? (
     <Outlet />
   ) : (
