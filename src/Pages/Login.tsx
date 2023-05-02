@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/tinycomp/Input";
@@ -10,9 +10,10 @@ import { toast } from "react-toastify";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { currentUser, users, setCurrentUser } = useUser();
+  const { currentUser, users, setCurrentUser, persistName, setPersistName } =
+    useUser();
   const [details, setDetails] = useState({ username: "", password: "" });
-  const name = currentUser?.full_name?.split(" ")[1] || "";
+  // const name = currentUser?.full_name?.split(" ")[1] || "";
 
   // set username and password
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +40,9 @@ export default function Login() {
       return;
     }
     if (details?.password === currUser?.password) {
+      setPersistName(currUser?.full_name?.split(" ")[1]);
       localStorage.setItem("currUser", JSON.stringify(currUser));
+      localStorage.setItem("persistname", persistName);
       setCurrentUser(currUser);
       toast.success("Hold on dashboard coming up");
       setTimeout(() => {
@@ -66,9 +69,11 @@ export default function Login() {
       <div className="h-[80vh] flex justify-center items-center">
         <div className=" w-[80%] mx-auto space-y-[2em]">
           <div className="text-slate-400 font-semibold text-center ">
-            {currentUser ? "Welcome back," : "Welcome back"}
+            {persistName ? "Welcome back," : "Welcome "}&#160;
             {currentUser && (
-              <span className="text-black font-normal">{name ? name : ""}</span>
+              <span className="text-black font-normal">
+                {persistName ? persistName : ""}
+              </span>
             )}
           </div>
 

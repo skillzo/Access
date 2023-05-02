@@ -7,11 +7,12 @@ import { useEffect } from "react";
 
 export default function Dashboard() {
   const [showBalance, setShowBalance] = useState(false);
-  const { currentUser } = useUser();
+  const { currentUser, persistName } = useUser();
 
   // save current user in localstorage
   useEffect(() => {
     localStorage.setItem("currUser", JSON.stringify(currentUser));
+    localStorage.setItem("persistname", persistName);
   }, [currentUser]);
 
   return (

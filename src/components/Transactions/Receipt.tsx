@@ -2,7 +2,6 @@ import React from "react";
 import Logo from "../../assets/brand/Logo";
 
 export default function Receipt({ item, setShowReciept }: any) {
-  console.log(item);
   return (
     <div
       onClick={() => setShowReciept(false)}

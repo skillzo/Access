@@ -89,7 +89,6 @@ export default function BankTransfer() {
     }
   };
 
-  console.log(accName);
   // ///////////////////////////////////////////////////////////////////////////////////
   // DEFINE VARIABLES HERE
 
@@ -158,7 +157,6 @@ export default function BankTransfer() {
         </div>
       </div>
 
-      <button onClick={getUsers}> Get users</button>
       {/* Transfer form  */}
       <form className="space-y-[1em]" onSubmit={transferFunds}>
         <Select
@@ -228,7 +226,7 @@ export default function BankTransfer() {
           }
         />
 
-        <Button disabled={!isValid && loadTransfer}>Proceed</Button>
+        <Button disabled={!isValid}>Proceed</Button>
       </form>
     </>
   );

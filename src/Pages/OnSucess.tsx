@@ -23,7 +23,7 @@ export default function OnSucess() {
           <CTA text="Save Beneficiary" comp={<MdOutlinePersonAddAlt />} />
           <CTA text="Share Receipt" comp={<FiShare />} />
         </div>
-        <Button onClick={() => navigate("/")}>Close</Button>
+        <Button onClick={() => navigate("/", { replace: true })}>Close</Button>
       </div>
     </div>
   );
