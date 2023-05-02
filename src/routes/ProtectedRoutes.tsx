@@ -1,8 +1,15 @@
 import React from "react";
-import { Navigate, Outlet, redirect, Route } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useUser } from "../store/context";
 
 export default function ProtectedRoutes(): any {
-  const { isAuth } = useUser();
-  return isAuth === true ? <Outlet /> : <Navigate to="/login" replace />;
+  const location = useLocation();
+  const { currentUser } = useUser();
+
+  console.log(currentUser);
+  return currentUser?.id ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/login" replace state={{ from: location }} />
+  );
 }

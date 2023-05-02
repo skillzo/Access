@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import "./App.css";
 import Wrapper from "./components/Wrapper/Wrapper";

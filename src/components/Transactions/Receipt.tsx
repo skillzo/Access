@@ -4,8 +4,7 @@ export default function Receipt({ item, setShowReciept, showReciept }: any) {
   return (
     <div
       onClick={() => {
-        console.log(showReciept);
-        setShowReciept(!showReciept);
+        setShowReciept(false);
       }}
       className="fixed top-0 left-0 h-screen w-full z-10 bg-[#dbdbee67] flex justify-center items-center"
     >

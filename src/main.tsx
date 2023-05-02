@@ -1,7 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  createRoutesFromChildren,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
 import Error from "./Pages/Error.js";
 import "./index.css";
 import Login from "./Pages/Login";
@@ -16,45 +22,25 @@ import Settings from "./Pages/Settings";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import SignUp from "./Pages/SignUp";
 // initailize react router v6.8.2
-const router = createBrowserRouter([
-  {
-    path: "/",
 
-    element: <App />,
-    errorElement: <Error />,
-    children: [
-      {
-        path: "/",
-        element: <Transfer />,
-      },
-      {
-        path: "/transactions",
-        element: <Transactions />,
-      },
-    ],
-  },
-  {
-    path: "success",
-    element: <OnSucess />,
-  },
-  {
-    path: "settings",
-    element: <Settings />,
-  },
-  {
-    path: "*",
-    element: <NotFoundPage />,
-  },
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route>
+      <Route element={<ProtectedRoutes />}>
+        <Route path="/" element={<App />} errorElement={<Error />}>
+          <Route index element={<Transfer />} />
+          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/success" element={<OnSucess />} />
+          <Route path="/settings" element={<Settings />} />
+        </Route>
+      </Route>
 
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/signup",
-    element: <SignUp />,
-  },
-]);
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Route>
+  )
+);
 
 const queryClient = new QueryClient();
 

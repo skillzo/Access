@@ -38,9 +38,16 @@ export default function Info({ amount, remarks, item }: props) {
 
   return (
     <div
-      onClick={() => console.log(item)}
+      onClick={() => setShowReciept(true)}
       className="flex justify-between items-center p-4 border-b"
     >
+      {showReciept && (
+        <Receipt
+          item={item}
+          setShowReciept={setShowReciept}
+          showReciept={showReciept}
+        />
+      )}
       <div className="bg-[#e0e5ee] p-3 ">
         <TfiCreditCard color="#173f80" />
       </div>

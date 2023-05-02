@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import BankTransfer from "../components/Transfer/BankTransfer";
 import Username from "../components/Transfer/Username";
-import { addComma } from "../utils/AddCommas";
 
 export default function Transfer() {
   const [usernameTransfer, setUsernameTransfer] = useState(false);

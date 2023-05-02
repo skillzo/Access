@@ -16,7 +16,6 @@ export default function Username() {
   const [transferAmount, setTransferAmount] = useState("");
   const [narration, setNarration] = useState("");
   const [loadTransfer, setLoadTransfer] = useState(false);
-
   const navigate = useNavigate();
 
   const handleChange = (e: any) => {
@@ -36,7 +35,7 @@ export default function Username() {
   const date = new Date();
   const currDate = date.toJSON();
 
-  // this details will render on the recievers end
+  // transfer details for receiver
   const beneficiarytrxdetails: any = {
     transaction_amount: amountTransferredByUser,
     transaction_type: "USERNAME",
@@ -47,7 +46,7 @@ export default function Username() {
     transaction_status: "Successful",
   };
 
-  // this details will render on the senders end
+  // transfer details for sender
   const trxdetails: any = {
     transaction_amount: -amountTransferredByUser,
     transaction_type: "USERNAME",
@@ -73,11 +72,13 @@ export default function Username() {
     beneficiary?.transaction.push(amountTransferredByUser);
     currentUser?.transaction_details.push(trxdetails);
     beneficiary?.transaction_details.push(beneficiarytrxdetails);
+
+    console.log(users);
     // initiate transfer sequence
-    setLoadTransfer(true);
-    setTimeout(() => {
-      navigate("/success");
-    }, 1000);
+    // setLoadTransfer(true);
+    // setTimeout(() => {
+    //   navigate("/success");
+    // }, 1000);
     if (currentUser != undefined)
       return (currentUser.transfer_24hrs += amountTransferredByUser);
   };

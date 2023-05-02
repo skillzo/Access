@@ -2,16 +2,24 @@ import React, { useState } from "react";
 import Wrapper from "../components/Wrapper/Wrapper";
 import Logo from "../assets/brand/Logo";
 import Input from "../components/tinycomp/Input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "../store/context";
+import { v4 as uuidv4 } from "uuid";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../store/Firebase/Firebase";
+import Toast from "../components/Toast";
+import { toast } from "react-toastify";
 
 export default function SignUp() {
+  const navigate = useNavigate();
+  const { setCurrentUser, users } = useUser();
   const [details, setDetails] = useState({
     first_name: "",
     last_name: "",
     username: "",
     password: "",
-    password2: "",
   });
+  const usersCollection = collection(db, "users");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -20,9 +28,37 @@ export default function SignUp() {
     });
   };
 
-  console.log(details);
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const userSchema = {
+      id: uuidv4(),
+      full_name: details.first_name + details.last_name,
+      userName: details.username,
+      transaction: [3000000],
+      password: details.password,
+      transfer_24hrs: 0,
+      transaction_details: [],
+    };
+    if (
+      users?.find(
+        (user: any) => user?.userName?.toLowerCase() === details.username
+      )
+    ) {
+      toast.error("username is already taken");
+      return;
+    }
+    await addDoc(usersCollection, userSchema);
+    localStorage.setItem("currUser", JSON.stringify(userSchema));
+    setCurrentUser(userSchema);
+    toast.success("yo!!! welcome to our bank'😒 ");
+    setTimeout(() => {
+      navigate("/", { replace: true });
+    }, 3000);
+  };
+
   return (
     <Wrapper>
+      <Toast />
       <div className="flex justify-between items-center">
         <div className="w-[150px]">
           <Logo />
@@ -43,9 +79,7 @@ export default function SignUp() {
 
           {/* login form  */}
           <form
-            onSubmit={(e) => {
-              console.log(details);
-            }}
+            onSubmit={handleSubmit}
             className="space-y-[1.5em] bg-access-blue"
           >
             <div className="space-y-[1em]">
@@ -73,16 +107,10 @@ export default function SignUp() {
                 onChange={handleChange}
                 name="password"
               />
-              <Input
-                type="password"
-                placeholder="Confirm Password"
-                onChange={handleChange}
-                name="password2"
-              />
             </div>
 
             <button className="bg-p-orange text-white text-sm font-semibold py-[1em] w-full">
-              SIGN IN
+              SIGN UP
             </button>
           </form>
 

@@ -16,8 +16,8 @@ import { formatNumber } from "../../utils/formatNumber";
 import { v4 as uuidv4 } from "uuid";
 
 export default function BankTransfer() {
-  const { currentUser } = useUser();
-  const [selected, setSelected] = useState("058");
+  const { currentUser, getUsers, addUser } = useUser();
+  const [selected, setSelected] = useState("");
   const [accNum, setAccNum] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
   const [narration, setNarration] = useState("");
@@ -161,6 +161,7 @@ export default function BankTransfer() {
         </div>
       </div>
 
+      <button onClick={getUsers}> Get users</button>
       {/* Transfer form  */}
       <form className="space-y-[1em]" onSubmit={handleSubmit}>
         <Select

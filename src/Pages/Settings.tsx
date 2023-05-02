@@ -9,8 +9,7 @@ export default function Settings() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { isAuth, setIsAuth } = useUser();
-  console.log("settings", isAuth);
+  const { setCurrentUser } = useUser();
 
   return (
     <Wrapper>
@@ -32,8 +31,9 @@ export default function Settings() {
             <p>Logout</p>
             <div
               onClick={() => {
-                console.log("log out ");
-                setIsAuth(false);
+                localStorage.removeItem("currUser");
+                setCurrentUser({});
+                navigate("/login", { replace: true });
               }}
             >
               <FiLogOut />

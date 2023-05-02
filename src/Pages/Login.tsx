@@ -1,19 +1,18 @@
 import React from "react";
-import { useEffect } from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/tinycomp/Input";
 import Wrapper from "../components/Wrapper/Wrapper";
 import { useUser } from "../store/context";
 import Logo from "../assets/brand/Logo";
+import Toast from "../components/Toast";
+import { toast } from "react-toastify";
 
 export default function Login() {
-  const { currentUser, users, setCurrentUser, setIsAuth, isAuth } = useUser();
-  const [details, setDetails] = useState({ username: "", password: "" });
-  // const name = currentUser?.full_name.split(" ")[1] || "skillzo";
-
   const navigate = useNavigate();
+  const { currentUser, users, setCurrentUser } = useUser();
+  const [details, setDetails] = useState({ username: "", password: "" });
+  const name = currentUser?.full_name?.split(" ")[1] || "";
 
   // set username and password
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,16 +22,25 @@ export default function Login() {
     });
   };
 
-  // login user
-  const currUser = users.find(
-    (item: any) => item.userName === details.username.toLowerCase()
+  // DEFINE CURRENT USER
+  const currUser = users?.find(
+    (item: any) =>
+      item.userName.toLowerCase() === details.username.toLowerCase()
   );
 
-  const handlesubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  console.log(currUser);
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (details?.username !== currUser?.userName) {
+      toast.error("username is incorrect");
+      return;
+    }
+    if (details?.password !== currUser?.password) {
+      toast.error("password is incorrect");
+      return;
+    }
     if (details?.password === currUser?.password) {
-      setIsAuth(true);
-      localStorage.setItem("currUser", JSON.stringify(currentUser));
+      localStorage.setItem("currUser", JSON.stringify(currUser));
       setCurrentUser(currUser);
       navigate("/", { replace: true });
     }
@@ -40,6 +48,7 @@ export default function Login() {
 
   return (
     <Wrapper>
+      <Toast />
       <div className="flex justify-between items-center">
         <div className="w-[150px]">
           <Logo />
@@ -57,15 +66,13 @@ export default function Login() {
           <div className="text-slate-400 font-semibold text-center ">
             {currentUser ? "Welcome back," : "Welcome back"}
             {currentUser && (
-              <span className="text-black font-normal">
-                {currentUser?.userName}
-              </span>
+              <span className="text-black font-normal">{name ? name : ""}</span>
             )}
           </div>
 
           {/* login form  */}
           <form
-            onSubmit={handlesubmit}
+            onSubmit={handleLogin}
             className="space-y-[1.5em] bg-access-blue"
           >
             <div className="space-y-[1em]">
@@ -95,7 +102,9 @@ export default function Login() {
           {/* sign up new user  */}
           <div className="text-center text-sm text-slate-400">
             Don't have an account? &nbsp;
-            <span className="font-semibold text-p-blue">Sign Up</span>
+            <Link to="/signup" className="font-semibold text-p-blue">
+              Sign Up
+            </Link>
           </div>
         </div>
       </div>
