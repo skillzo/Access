@@ -133,10 +133,10 @@ export default function BankTransfer() {
     currentUser.balance += -amountTransferredByUser;
     localStorage.setItem("currUser", JSON.stringify(currentUser));
     // initiate transfer sequence
-    // setLoadTransfer(true);
-    // setTimeout(() => {
-    //   navigate("/success");
-    // }, 1000);
+    setLoadTransfer(true);
+    setTimeout(() => {
+      navigate("/success");
+    }, 1000);
   };
 
   // validate transfer
@@ -228,7 +228,7 @@ export default function BankTransfer() {
           }
         />
 
-        <Button disabled={!isValid}>Proceed</Button>
+        <Button disabled={!isValid && loadTransfer}>Proceed</Button>
       </form>
     </>
   );
