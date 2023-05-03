@@ -56,6 +56,8 @@ export default function Username() {
   const beneRef = doc(db, "users", beneficiary_user_id);
   const currRef = doc(db, "users", `${currentUser?.userName?.trim()}id`);
 
+  console.log("beneInitialState", beneInitialState);
+  console.log("currInitialState", currInitialState);
   // get initial state from firebase
   const getBeneInitialState = async () => {
     if (beneficiary_user_id)

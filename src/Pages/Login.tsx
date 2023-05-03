@@ -7,13 +7,31 @@ import { useUser } from "../store/context";
 import Logo from "../assets/brand/Logo";
 import Toast from "../components/Toast";
 import { toast } from "react-toastify";
+import Button from "../components/tinycomp/Button";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { currentUser, users, setCurrentUser, persistName, setPersistName } =
-    useUser();
+  const {
+    currentUser,
+    users,
+    setCurrentUser,
+    persistName,
+    setPersistName,
+    getUsers,
+  } = useUser();
   const [details, setDetails] = useState({ username: "", password: "" });
   // const name = currentUser?.full_name?.split(" ")[1] || "";
+
+  // hydrate users array from firebase
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted) {
+      getUsers();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // set username and password
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +68,9 @@ export default function Login() {
       }, 3000);
     }
   };
+
+  // basic checks before log in
+  const isValid = details.password && details.username;
 
   return (
     <Wrapper>
@@ -101,9 +122,7 @@ export default function Login() {
             <div className="text-p-blue font-medium text-right">
               Forgot Password?
             </div>
-            <button className="bg-p-orange text-white text-sm font-semibold py-[1em] w-full">
-              SIGN IN
-            </button>
+            <Button disabled={!isValid}>SIGN IN</Button>
           </form>
 
           {/* sign up new user  */}

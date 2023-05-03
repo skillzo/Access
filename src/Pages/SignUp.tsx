@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Wrapper from "../components/Wrapper/Wrapper";
 import Logo from "../assets/brand/Logo";
 import Input from "../components/tinycomp/Input";
@@ -14,7 +14,7 @@ import Button from "../components/tinycomp/Button";
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const { setCurrentUser, users } = useUser();
+  const { setCurrentUser, users, getUsers } = useUser();
   const [details, setDetails] = useState({
     first_name: "",
     last_name: "",
@@ -23,6 +23,17 @@ export default function SignUp() {
   });
   const user_id = `${details.username?.trim()}id`;
   const usersCollection = doc(db, "users", user_id);
+
+  // hydrate users array from firebase
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted) {
+      getUsers();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
