@@ -30,7 +30,7 @@ export default function SignUp() {
     });
   };
 
-  const signUp = async (e: any) => {
+  const signUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const userSchema = {
       id: uuidv4(),
@@ -39,9 +39,10 @@ export default function SignUp() {
         " " +
         capitalizeFirstLetter(details.last_name),
       userName: details.username?.trim(),
-      balance: 3000000,
       password: details.password,
+      balance: 3000000,
       transfer_24hrs: 0,
+      recent_transaction: [],
       transaction_details: [],
     };
     if (
@@ -55,14 +56,59 @@ export default function SignUp() {
     await setDoc(usersCollection, userSchema);
     localStorage.setItem("currUser", JSON.stringify(userSchema));
     setCurrentUser(userSchema);
-    toast.success("welcome to our bank");
-    // setTimeout(() => {
-    //   navigate("/", { replace: true });
-    // }, 3000);
+    toast.success("Welcome to our bank");
+    setTimeout(() => {
+      navigate("/", { replace: true });
+    }, 3000);
+  };
+
+  const addskillzo = async () => {
+    await setDoc(doc(db, "users", "skillzoid"), {
+      id: "T1XwocBvjQHmbRuziPpc",
+      full_name: "Chukwu Emmanuel Oluwatobi",
+      userName: "skillzo",
+      password: "skillzo",
+      balance: 3000000,
+      transfer_24hrs: 2000000,
+      recent_transaction: [
+        {
+          id: uuidv4(),
+          bankCode: "058",
+          account_number: "0243563736",
+          full_name: "Chukwu Emmanuel Oluwatobi",
+        },
+        {
+          id: uuidv4(),
+          bankCode: "50211",
+          account_number: "2023812295",
+          full_name: "Uzoechina Jacinta ijeoma ",
+        },
+      ],
+      transaction_details: [
+        {
+          beneficiary: [
+            {
+              bank_name: "access bank",
+              full_name: "Jacinta Uzoechina Ijeoma",
+              account_number: "0098220998",
+            },
+          ],
+          sender: "skillo",
+          transaction_date: "2023-03-27T00:56:50.528Z",
+          remark:
+            "TRF/null/FRM EMMANURL OLUWATOBI CHUKWU TO DAMILOLA FUNMILOLA OLAYIWOLA",
+          transaction_ref: "NX0001000100010101",
+          transaction_amount: 1000000,
+          transaction_status: "Successful",
+          transaction_type: "username",
+        },
+      ],
+    });
   };
 
   return (
     <Wrapper>
+      <button onClick={() => addskillzo()}>click me</button>
       <Toast />
       <div className="flex justify-between items-center">
         <div className="w-[150px]">
@@ -75,14 +121,12 @@ export default function SignUp() {
         />
       </div>
 
-      {/* existing user  */}
       <div className="h-[80vh] flex justify-center items-center">
         <div className=" w-[80%] mx-auto space-y-[2em]">
           <div className="text-slate-400 font-semibold text-center ">
             FREE MONEY FOR EVERYONE
           </div>
 
-          {/* login form  */}
           <form onSubmit={signUp} className="space-y-[1.5em] bg-access-blue">
             <div className="space-y-[1em]">
               <Input
@@ -116,7 +160,6 @@ export default function SignUp() {
             </button>
           </form>
 
-          {/* sign up new user  */}
           <div className="text-center text-sm text-slate-400">
             Already have an account? &nbsp;
             <Link to="/login">

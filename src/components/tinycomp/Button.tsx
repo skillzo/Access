@@ -11,9 +11,7 @@ export default function Button({ children, disabled, onClick }: props) {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`text-white ${
-        disabled ? "bg-[#bebfbf]" : "bg-p-orange"
-      } text-sm font-semibold py-[1em] w-full`}
+      className="text-white disabled:bg-[#bebfbf] bg-p-orange text-sm font-semibold py-[1em] w-full"
     >
       {children}
     </button>

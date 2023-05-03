@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../store/context";
 import Button from "../tinycomp/Button";
@@ -31,6 +31,7 @@ export default function Username() {
   const [narration, setNarration] = useState("");
   const [loadTransfer, setLoadTransfer] = useState(false);
   const [beneInitialState, setBeneInitialState] = useState<Object | any>({});
+  const [currInitialState, setCurrInitialState] = useState<Object | any>({});
 
   const handleChange = (e: any) => {
     setUserName(e.target.value);
@@ -69,20 +70,18 @@ export default function Username() {
         toast.error("Beneficiary does not exist");
       }
   };
-  // const getCurrInitialState = async () => {
-  //   try {
-  //     const response = await getDoc(currRef);
-  //     if (response?.data() === undefined) {
-  //       toast.error(
-  //         "Error encounted while fetching your account. Logout and try again"
-  //       );
-  //     }
-  //     setCurrInitialState(response?.data());
-  //     return;
-  //   } catch (e: any) {
-  //     toast.error("Cant get your account. Try again");
-  //   }
-  // };
+  const getCurrInitialState = async () => {
+    try {
+      const response = await getDoc(currRef);
+      if (response?.data() === undefined) {
+        toast.error("something went wrong with your account");
+      }
+      setCurrInitialState(response?.data());
+      return;
+    } catch (e: any) {
+      toast.error("something went wrong with your account");
+    }
+  };
 
   // transfer details for receiver
   const beneficiarytrxdetails: any = {
@@ -153,7 +152,8 @@ export default function Username() {
     !userEnteredThierName &&
     Boolean(currentUser?.balance > amountTransferredByUser) &&
     narration &&
-    Boolean(beneInitialState?.id);
+    Boolean(beneInitialState?.id) &&
+    Boolean(currInitialState?.id);
 
   return (
     <>
@@ -170,7 +170,10 @@ export default function Username() {
             type="text"
             placeholder="Beneficiary Username"
             value={userName}
-            onBlur={getBeneInitialState}
+            onBlur={() => {
+              getBeneInitialState();
+              getCurrInitialState();
+            }}
             onChange={handleChange}
           />
 

@@ -6,62 +6,90 @@ import { db } from "./Firebase/Firebase";
 const userContext = createContext();
 
 export const ContextProvider = ({ children }) => {
-  // const initialUsers = [
-  //   {
-  //     id: "4rtxveVae5OFbdZQdulv",
-  //     password: "jacy",
-  //     balance: 300000,
-  //     full_name: "Uzoechina Jacinta Ijeoma",
-  //     transaction_details: [
-  //       {
-  //         sender: "skillo",
-  //         transaction_status: "Successful",
-  //         remark:
-  //           "TRF/null/FRM EMMANURL OLUWATOBI CHUKWU TO DAMILOLA FUNMILOLA OLAYIWOLA",
-  //         transaction_ref: "NX0001000100010101",
-  //         transaction_amount: -1000000,
-  //         beneficiary: [
-  //           {
-  //             full_name: "Jacinta Uzoechina Ijeoma",
-  //             bank_name: "access bank",
-  //             account_number: "0098220998",
-  //           },
-  //         ],
-  //         transaction_type: "username",
-  //         transaction_date: "2023-03-27T00:56:50.528Z",
-  //       },
-  //     ],
-  //     transfer_24hrs: 1050000,
-  //     userName: "jacy",
-  //   },
-  //   {
-  //     transaction_details: [
-  //       {
-  //         beneficiary: [
-  //           {
-  //             bank_name: "access bank",
-  //             full_name: "Jacinta Uzoechina Ijeoma",
-  //             account_number: "0098220998",
-  //           },
-  //         ],
-  //         sender: "skillo",
-  //         transaction_date: "2023-03-27T00:56:50.528Z",
-  //         remark:
-  //           "TRF/null/FRM EMMANURL OLUWATOBI CHUKWU TO DAMILOLA FUNMILOLA OLAYIWOLA",
-  //         transaction_ref: "NX0001000100010101",
-  //         transaction_amount: 1000000,
-  //         transaction_status: "Successful",
-  //         transaction_type: "username",
-  //       },
-  //     ],
-  //     userName: "skillzo",
-  //     password: "skillzo",
-  //     balance: 3000000,
-  //     id: "T1XwocBvjQHmbRuziPpc",
-  //     transfer_24hrs: 2000000,
-  //     full_name: "Chukwu Emmanuel Oluwatobi",
-  //   },
-  // ];
+  const initialUsers = [
+    {
+      id: "4rtxveVae5OFbdZQdulv",
+      full_name: "Uzoechina Jacinta Ijeoma",
+      userName: "jacy",
+      password: "jacy",
+      balance: 300000,
+      transfer_24hrs: 1050000,
+      recent_transaction: [
+        {
+          id: uuidv4(),
+          bankCode: "058",
+          account_number: "0243563736",
+          full_name: "Chukwu Emmanuel Oluwatobi",
+        },
+        {
+          id: uuidv4(),
+          bankCode: "50211",
+          account_number: "2023812295",
+          full_name: "Uzoechina Jacinta ijeoma ",
+        },
+      ],
+      transaction_details: [
+        {
+          sender: "skillo",
+          transaction_status: "Successful",
+          remark:
+            "TRF/null/FRM EMMANURL OLUWATOBI CHUKWU TO DAMILOLA FUNMILOLA OLAYIWOLA",
+          transaction_ref: "NX0001000100010101",
+          transaction_amount: -1000000,
+          beneficiary: [
+            {
+              full_name: "Jacinta Uzoechina Ijeoma",
+              bank_name: "access bank",
+              account_number: "0098220998",
+            },
+          ],
+          transaction_type: "username",
+          transaction_date: "2023-03-27T00:56:50.528Z",
+        },
+      ],
+    },
+    {
+      id: "T1XwocBvjQHmbRuziPpc",
+      full_name: "Chukwu Emmanuel Oluwatobi",
+      userName: "skillzo",
+      password: "skillzo",
+      balance: 3000000,
+      transfer_24hrs: 2000000,
+      recent_transaction: [
+        {
+          id: uuidv4(),
+          bankCode: "058",
+          account_number: "0243563736",
+          full_name: "Chukwu Emmanuel Oluwatobi",
+        },
+        {
+          id: uuidv4(),
+          bankCode: "50211",
+          account_number: "2023812295",
+          full_name: "Uzoechina Jacinta ijeoma ",
+        },
+      ],
+      transaction_details: [
+        {
+          beneficiary: [
+            {
+              bank_name: "access bank",
+              full_name: "Jacinta Uzoechina Ijeoma",
+              account_number: "0098220998",
+            },
+          ],
+          sender: "skillo",
+          transaction_date: "2023-03-27T00:56:50.528Z",
+          remark:
+            "TRF/null/FRM EMMANURL OLUWATOBI CHUKWU TO DAMILOLA FUNMILOLA OLAYIWOLA",
+          transaction_ref: "NX0001000100010101",
+          transaction_amount: 1000000,
+          transaction_status: "Successful",
+          transaction_type: "username",
+        },
+      ],
+    },
+  ];
   const [users, setUsers] = useState([]);
   const [persistName, setPersistName] = useState(
     localStorage.getItem("persistname") || ""

@@ -20,7 +20,7 @@ import { db } from "../../store/Firebase/Firebase";
 export default function BankTransfer() {
   const date = new Date();
   const currDate = date.toJSON();
-  const { currentUser, getUsers } = useUser();
+  const { currentUser } = useUser();
   const [selected, setSelected] = useState("");
   const [accNum, setAccNum] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
@@ -52,7 +52,6 @@ export default function BankTransfer() {
       value,
     });
   });
-
   //  custom bank name filter function
   const customSearch = (option: any, input: string) => {
     if (
@@ -65,7 +64,6 @@ export default function BankTransfer() {
       return false;
     }
   };
-
   // get bank name from account number
   const getData: any = async () => {
     const url = `https://maylancer.org/api/nuban/api.php?account_number=${accNum.trim()}&bank_code=${selected}`;
@@ -78,7 +76,6 @@ export default function BankTransfer() {
     error,
     refetch,
   }: any = useQuery("acc-name", getData, { enabled: false });
-
   // fetch account name using api
   const handleChange = (e: any) => {
     setAccNum(e.target.value);
@@ -92,10 +89,19 @@ export default function BankTransfer() {
   // ///////////////////////////////////////////////////////////////////////////////////
   // DEFINE VARIABLES HERE
 
-  // recievers full name
+  // recievers full name and ref to db
   const full_name = accName?.data.account_name;
   const currRef = doc(db, "users", `${currentUser?.userName?.trim()}id`);
 
+  // schema
+
+  // recent transaction schema
+  const recentTrx = {
+    id: uuidv4(),
+    bankCode: selected,
+    account_number: accNum,
+    full_name: full_name,
+  };
   // transaction reciept for the sender
   const trxdetails: any = {
     transaction_amount: -amountTransferredByUser,
@@ -114,6 +120,10 @@ export default function BankTransfer() {
     transaction_ref: uuidv4(),
     transaction_status: "Successful",
   };
+  // get existing account numbers in the recent transaction array
+  const existingAccounts = currentUser?.recent_transaction?.map((acc: any) => {
+    return acc.account_number;
+  });
 
   // initiate transfer to bank account
   const transferFunds = async (e: any) => {
@@ -125,11 +135,20 @@ export default function BankTransfer() {
       transfer_24hrs: increment(-amountTransferredByUser),
       transaction_details: arrayUnion(trxdetails),
     });
+    // update recent transactions
+    if (!existingAccounts.includes(accNum)) {
+      await updateDoc(currRef, {
+        recent_transaction: arrayUnion(recentTrx),
+      });
+    }
 
     // updatelocalStorage
     currentUser?.transaction_details.push(trxdetails);
     currentUser.transfer_24hrs += amountTransferredByUser;
     currentUser.balance += -amountTransferredByUser;
+    if (!existingAccounts.includes(accNum)) {
+      currentUser?.recent_transaction.push(recentTrx);
+    }
     localStorage.setItem("currUser", JSON.stringify(currentUser));
     // initiate transfer sequence
     setLoadTransfer(true);
@@ -140,6 +159,9 @@ export default function BankTransfer() {
 
   // validate transfer
   const isValid = selected && accName && transferAmount && narration;
+
+  // ////////////////////////////////////////
+
   return (
     <>
       {/* loading state for transfer */}
@@ -150,12 +172,32 @@ export default function BankTransfer() {
       )}
 
       {/* frequent transfers */}
-      <div className="space-y-2">
-        <p className="text-slate-600 font-medium text-sm">Recent Transfers</p>
-        <div className="flex space-x-4">
-          <RecentTransfer />
+      {currentUser?.recent_transaction.length > 1 ? (
+        <div className="space-y-2">
+          <p className="text-slate-600 font-medium text-sm">Recent Transfers</p>
+
+          <div className="overflow-x-scroll">
+            <div className="flex space-x-4 w-max">
+              {currentUser?.recent_transaction?.map((trx: any) => {
+                return (
+                  <RecentTransfer
+                    refetch={refetch}
+                    setAccNum={setAccNum}
+                    setSelected={setSelected}
+                    key={trx.id}
+                    name={trx.full_name}
+                    item={trx}
+                  />
+                );
+              })}
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <p className="text-slate-600 font-medium text-sm">
+          No Recent Transfers
+        </p>
+      )}
 
       {/* Transfer form  */}
       <form className="space-y-[1em]" onSubmit={transferFunds}>
