@@ -10,6 +10,7 @@ import { db } from "../store/Firebase/Firebase";
 import Toast from "../components/Toast";
 import { toast } from "react-toastify";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLater";
+import Button from "../components/tinycomp/Button";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -45,70 +46,36 @@ export default function SignUp() {
       recent_transaction: [],
       transaction_details: [],
     };
-    if (
-      users?.find(
-        (user: any) => user?.userName?.toLowerCase() === details.username
-      )
-    ) {
-      toast.error("username is already taken");
-      return;
+    try {
+      if (
+        users?.find(
+          (user: any) => user?.userName?.toLowerCase() === details.username
+        )
+      ) {
+        toast.error("username is already taken");
+        return;
+      }
+      await setDoc(usersCollection, userSchema);
+      localStorage.setItem("currUser", JSON.stringify(userSchema));
+      setCurrentUser(userSchema);
+      toast.success("Welcome to our bank");
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 3000);
+    } catch (e) {
+      toast.error("sign up failed");
     }
-    await setDoc(usersCollection, userSchema);
-    localStorage.setItem("currUser", JSON.stringify(userSchema));
-    setCurrentUser(userSchema);
-    toast.success("Welcome to our bank");
-    setTimeout(() => {
-      navigate("/", { replace: true });
-    }, 3000);
   };
 
-  const addskillzo = async () => {
-    await setDoc(doc(db, "users", "skillzoid"), {
-      id: "T1XwocBvjQHmbRuziPpc",
-      full_name: "Chukwu Emmanuel Oluwatobi",
-      userName: "skillzo",
-      password: "skillzo",
-      balance: 3000000,
-      transfer_24hrs: 2000000,
-      recent_transaction: [
-        {
-          id: uuidv4(),
-          bankCode: "058",
-          account_number: "0243563736",
-          full_name: "Chukwu Emmanuel Oluwatobi",
-        },
-        {
-          id: uuidv4(),
-          bankCode: "50211",
-          account_number: "2023812295",
-          full_name: "Uzoechina Jacinta ijeoma ",
-        },
-      ],
-      transaction_details: [
-        {
-          beneficiary: [
-            {
-              bank_name: "access bank",
-              full_name: "Jacinta Uzoechina Ijeoma",
-              account_number: "0098220998",
-            },
-          ],
-          sender: "skillo",
-          transaction_date: "2023-03-27T00:56:50.528Z",
-          remark:
-            "TRF/null/FRM EMMANURL OLUWATOBI CHUKWU TO DAMILOLA FUNMILOLA OLAYIWOLA",
-          transaction_ref: "NX0001000100010101",
-          transaction_amount: 1000000,
-          transaction_status: "Successful",
-          transaction_type: "username",
-        },
-      ],
-    });
-  };
+  // basic checks before sign up
+  const isValid =
+    details.first_name &&
+    details.last_name &&
+    details.password &&
+    details.username;
 
   return (
     <Wrapper>
-      <button onClick={() => addskillzo()}>click me</button>
       <Toast />
       <div className="flex justify-between items-center">
         <div className="w-[150px]">
@@ -155,9 +122,7 @@ export default function SignUp() {
               />
             </div>
 
-            <button className="bg-p-orange text-white text-sm font-semibold py-[1em] w-full">
-              SIGN UP
-            </button>
+            <Button disabled={!isValid}>SIGN UP</Button>
           </form>
 
           <div className="text-center text-sm text-slate-400">
