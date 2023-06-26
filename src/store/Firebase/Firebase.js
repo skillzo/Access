@@ -8,7 +8,7 @@ const config = import.meta.env;
 const firebaseConfig = {
   apiKey: config.VITE_REACT_APP_apikey,
   authDomain: config.VITE_REACT_APP_authDomain,
-  projectId: config.VITE_REACT_APP_projectId,
+  projectId: "accessbank - c7361",
   storageBucket: config.VITE_REACT_APP_storageBucket,
   messagingSenderId: config.VITE_REACT_APP_messagingSenderId,
   appId: config.VITE_REACT_APP_appId,

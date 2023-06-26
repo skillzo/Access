@@ -172,7 +172,7 @@ export default function BankTransfer() {
       )}
 
       {/* frequent transfers */}
-      {currentUser?.recent_transaction.length > 1 ? (
+      {currentUser?.recent_transaction?.length > 0 ? (
         <div className="space-y-2">
           <p className="text-slate-600 font-medium text-sm">Recent Transfers</p>
 
